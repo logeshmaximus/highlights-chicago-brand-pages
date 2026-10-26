@@ -94,6 +94,40 @@
     }));
   });
 
+  // v2 service tabs: one group visible at a time
+  $$('[data-tabs]').forEach((bar) => {
+    const tabs = $$('[role="tab"]', bar);
+    tabs.forEach((t, i) => t.addEventListener('click', () => {
+      tabs.forEach((x, j) => {
+        x.setAttribute('aria-selected', String(i === j));
+        x.tabIndex = i === j ? 0 : -1;
+        const panel = document.getElementById(x.getAttribute('aria-controls'));
+        if (panel) panel.hidden = i !== j;
+      });
+    }));
+  });
+
+  // v2 swipe tracks: arrows scroll the track that sits just before them
+  $$('.v2-track-nav').forEach((nav) => {
+    const track = nav.previousElementSibling;
+    const prev = nav.querySelector('[data-prev]');
+    const next = nav.querySelector('[data-next]');
+    if (!track || !prev || !next) return;
+    const update = () => {
+      prev.disabled = track.scrollLeft <= 2;
+      next.disabled = track.scrollLeft + track.clientWidth >= track.scrollWidth - 2;
+    };
+    const step = (dir) => track.scrollBy({ left: dir * track.clientWidth * 0.9, behavior: 'smooth' });
+    prev.addEventListener('click', () => step(-1));
+    next.addEventListener('click', () => step(1));
+    track.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+  });
+
+  // v2 price table: "See all" on phones
+  $$('[data-more]').forEach((btn) => btn.addEventListener('click', () => btn.closest('.v2-table').classList.add('is-open')));
+
   // Forms never submit in the preview.
   $$('form').forEach((f) => f.addEventListener('submit', (e) => {
     e.preventDefault();

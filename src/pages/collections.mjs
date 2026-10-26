@@ -169,7 +169,8 @@ export function indexPage() {
 <div class="collection-directory-heading"><div><p class="collection-kicker">Pages</p><h2>What to review</h2></div>
 <p>Every page is noindex and its canonical points to highlightschicago.com, so the preview never competes with the live site.</p></div>
 <div class="collection-card-grid">
-${card({ href: 'brands/generac/generac-generator-installation/index.html', img: 'images/v3/photos/standby-generator.webp', pos: '62% 50%', alt: 'Standby generator', area: 'Service landing page', title: 'Generac Generator Installation & Repair', text: 'The first title on the Brand Pages sheet, built as a full service page in the v3 section order.', cta: 'Open page' })}
+${card({ href: 'brands/generac/generac-generator-installation/index.html', img: 'images/v3/photos/standby-generator.webp', pos: '62% 50%', alt: 'Standby generator', area: 'Service landing page', title: 'Generac Generator Installation & Repair', text: 'The first title on the Brand Pages sheet, in the form-first brand-page layout, with swipe rows instead of stacked cards.', cta: 'Open page' })}
+${card({ href: 'brands/generac/generac-generator-installation-v1/index.html', img: 'images/v3/photos/standby-generator.webp', pos: '30% 50%', alt: 'Standby generator', area: 'Earlier version', title: 'Generac page, first version', text: 'The first build in the long v3 service-page order, kept for comparison.', cta: 'Open page' })}
 ${card({ href: 'brands/index.html', img: 'images/v3/photos/tech-panel-work.webp', alt: 'Electrician at a panel', area: 'Brands hub', title: 'All brands', text: `${BRANDS.length} brands from the sheet, grouped by what they make.`, cta: 'Open page' })}
 ${card({ href: 'brands/generac/index.html', img: 'images/v3/photos/breaker-panel-wall.webp', pos: '5% 50%', alt: 'Breaker panel', area: 'Brand cluster page', title: 'Generac services', text: 'The cluster page pattern, shown for Generac with its three services.', cta: 'Open page' })}
 </div>

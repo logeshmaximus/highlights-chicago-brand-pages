@@ -6,6 +6,7 @@ import { fileURLToPath } from 'url';
 import { BRANDS } from './content/brands.mjs';
 import { brandPage, hubPage, indexPage } from './pages/collections.mjs';
 import { generacPage } from './pages/generac.mjs';
+import { generacV2Page } from './pages/generac-v2.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const out = path.join(root, 'docs');
@@ -24,7 +25,9 @@ const write = (rel, html) => {
 write('', indexPage());
 write('brands', hubPage());
 for (const b of BRANDS) write(`brands/${b.slug}`, brandPage(b));
-write('brands/generac/generac-generator-installation', generacPage());
+// v2 (the senior's brand-page structure) is the page; v1 stays for comparison.
+write('brands/generac/generac-generator-installation', generacV2Page());
+write('brands/generac/generac-generator-installation-v1', generacPage());
 
-const pages = 3 + BRANDS.length;
+const pages = 4 + BRANDS.length;
 console.log(`Built ${pages} pages into ${path.relative(root, out)} (${BRANDS.length} brands, ${BRANDS.reduce((n, b) => n + b.services.length, 0)} brand services).`);
