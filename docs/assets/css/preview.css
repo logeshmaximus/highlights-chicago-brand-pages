@@ -1,0 +1,88 @@
+/* Preview-only additions on top of the Design System v3 CSS (ds.css, site.css).
+   Colours and type reuse the design tokens: navy #15202a, blue #223d90, green #66b143. */
+
+.pv-bar{background:#223d90;color:#fff;font:500 13px/1.4 var(--font-inter),Inter,system-ui,sans-serif}
+.pv-bar-inner{max-width:1200px;margin:0 auto;padding:8px 20px;display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center}
+.pv-bar b{letter-spacing:.08em;text-transform:uppercase;font-size:12px}
+.pv-bar a{color:#fff;margin-left:auto;font-weight:600}
+
+/* Brand logo on the dark hero count panel */
+.pv-logo-chip{display:inline-grid;place-items:center;height:48px;min-width:120px;max-width:200px;padding:8px 16px;margin-bottom:18px;border-radius:10px;background:#fff}
+.pv-logo-chip img{max-height:30px;max-width:160px;width:auto;object-fit:contain}
+.pv-logo-chip--name{font-family:var(--font-space-grotesk),'Space Grotesk',sans-serif;font-weight:700;font-size:20px;letter-spacing:-.01em;color:#15202a;text-transform:none}
+.collection-hero-panel .pv-logo-chip{display:grid;width:max-content}
+
+/* Logo badge on brand cards (hub) */
+.collection-card-media{position:relative}
+.pv-logo-badge{position:absolute;left:16px;top:16px;z-index:2;display:grid;place-items:center;height:40px;padding:6px 12px;border-radius:8px;background:#fff;box-shadow:0 1px 2px #10283c1f}
+.pv-logo-badge img{max-height:24px;max-width:110px;width:auto}
+
+/* Cards for pages not built yet */
+.pv-card--soon{cursor:default}
+.pv-card--soon .collection-card-media{filter:grayscale(.45)}
+.pv-card--soon:hover .collection-card-media{transform:none}
+.pv-card--soon .collection-card-explore{color:#8f9ba4}
+
+/* Hub grouping */
+.pv-jump{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 40px}
+.pv-jump a{border:1px solid #d6dbe3;border-radius:999px;padding:7px 14px;color:#15202a;font-weight:600;font-size:14px;text-decoration:none}
+.pv-jump a:hover{border-color:#223d90;color:#223d90}
+.pv-group{margin-top:56px;scroll-margin-top:24px}
+.pv-group:first-of-type{margin-top:0}
+.pv-group-head{display:flex;align-items:baseline;gap:14px;margin-bottom:22px;border-bottom:1px solid #e4e4e4;padding-bottom:12px}
+.pv-group-title{margin:0;font:600 24px/30px var(--font-space-grotesk),'Space Grotesk',sans-serif;letter-spacing:-.01em;color:#15202a}
+.pv-group-head span{color:#6b6b6b;font-size:14px}
+.pv-back{margin:40px 0 0}
+.pv-back a{font-weight:700;color:#223d90}
+.pv-index-list{margin-top:64px}
+.pv-index-list ul{list-style:none;padding:0;margin:20px 0 0;display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px 24px}
+.pv-index-list li{display:flex;justify-content:space-between;gap:8px;border-bottom:1px solid #eee;padding:8px 0}
+.pv-index-list li span{color:#6b6b6b;font-size:13px}
+
+/* Brand wordmark tile where no official logo is on file yet */
+.pv-wordmark{display:grid;place-items:center;text-align:center;gap:2px;font-family:var(--f-display,'Space Grotesk'),sans-serif;color:#15202a}
+.pv-wordmark b{font-size:22px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.pv-wordmark small{font:500 11px/1.2 var(--f-body,Inter),sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#6b6b6b}
+
+/* Preview form note */
+.pv-form-msg{margin:10px 0 0;padding:10px 12px;border-radius:8px;background:#e9edf7;color:#182c69;font-size:14px}
+.ds-footer .pv-form-msg,.hc-footer .pv-form-msg{background:#ffffff1a;color:#fff}
+
+/* Quote fragments inside module copy */
+.pv-quote{font-style:italic}
+
+@media (max-width:767px){
+  .pv-bar a{margin-left:auto}
+  .pv-bar span{display:none}
+  .pv-bar-inner{padding:6px 16px}
+  .pv-logo-chip{height:42px;min-width:100px}
+  .pv-group-title{font-size:20px;line-height:26px}
+}
+
+/* Pricing: second callout and its source links */
+.ds-callout-light.pv-gap{margin-top:20px}
+.pv-sources{font-size:14px;margin-top:8px}
+.pv-sources a{color:#223d90;font-weight:600}
+
+/* Hero: keep Google and Yelp side by side on one row (RATING-01) */
+.ds-hero .hc-ratings{flex-wrap:nowrap;gap:14px}
+.ds-hero .hc-rating{gap:8px}
+.ds-hero .hc-rating-mark{width:28px;height:28px}
+.ds-hero .hc-rating-num{font-size:24px}
+.ds-hero .hc-rating-count{font-size:14px;white-space:nowrap}
+.ds-hero .hc-stars-google svg{width:14px;height:14px}
+.ds-hero .hc-stars-yelp>span{width:18px;height:18px}
+.ds-hero .hc-stars-yelp svg{width:13px;height:13px}
+@media (max-width:560px){.ds-hero .hc-ratings{flex-wrap:wrap;gap:10px 14px}}
+
+/* Wordmark placeholder inside the compact closing logo strip */
+.ds-logo-tile--compact .pv-wordmark b{font-size:15px;letter-spacing:.04em}
+.pv-logo-chip--name{height:auto;min-height:48px;gap:0;line-height:1.1}
+.pv-logo-chip--name b{font-size:19px}
+.pv-logo-chip--name small{font:600 10px/1.2 var(--font-inter),Inter,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#6b6b6b}
+
+/* Hub cards: brand-led media (official logo, or the brand name on the empty-media ground) */
+.pv-media-logo{background:#fff;padding:40px 48px}
+.pv-media-logo img{max-width:72%;max-height:70px;width:auto;height:auto;object-fit:contain}
+.collection-card-media-empty.pv-media-name{background:radial-gradient(circle at 28% 30%,#66b143a6,#0000 26%),linear-gradient(135deg,#223d90,#15202a)}
+.pv-media-name>span{font-size:clamp(34px,3.4vw,52px);letter-spacing:-.04em;text-align:center;padding:0 24px;line-height:1}
