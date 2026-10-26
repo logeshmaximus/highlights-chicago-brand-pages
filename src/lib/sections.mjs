@@ -267,7 +267,6 @@ ${headBlock({ eyebrow: 'More from Highlights Chicago', title: d.title, id: 'othe
 
 // ---------- Pricing ----------
 export function pricing(d, base) {
-  const f = d.featured;
   const permit = (v, dark) => {
     const map = { yes: ['yes', 'check', 'Yes'], sometimes: ['sometimes', 'help', 'Sometimes'], no: ['no', 'minus', 'No'] };
     const [cls, ic, label] = map[v];
@@ -279,8 +278,8 @@ export function pricing(d, base) {
   return band('grey', 'pricing', `<div class="ds-wrap">
 ${headBlock({ eyebrow: 'Cost & permits', title: d.title, id: 'pricing-title', lede: d.lede })}
 <p class="ds-source">${badge('fileText', 32, 'blue', 15)}<b>Data source</b><span>${esc(d.source)}</span></p>
-<ul class="ds-price-stats"><li class="ds-price-card is-featured"><div class="ds-price-top">${badge('trendingDown', 48, 'navy')}<span class="ds-price-permit">Permit needed?${permit('yes', true)}</span></div>
-<h3 class="ds-h6">${esc(f.label)}</h3><p class="ds-price-value">${esc(f.value)}</p><p class="ds-price-sub">median reported</p><span class="ds-bar" style="--fill:1" aria-hidden="true"></span><p class="ds-price-count">${icon('fileText', 14)}${esc(f.count)}</p></li></ul>
+<ul class="ds-price-stats">${d.cards.map((c, i) => `<li class="ds-price-card${i ? '' : ' is-featured'}"><div class="ds-price-top">${badge(c.icon || 'trendingDown', 48, i ? 'blue' : 'navy')}<span class="ds-price-permit">Permit needed?${permit('yes', !i)}</span></div>
+<h3 class="ds-h6">${esc(c.label)}</h3><p class="ds-price-value">${esc(c.value)}</p><p class="ds-price-sub">median reported</p><span class="ds-bar" style="--fill:${c.fill}" aria-hidden="true"></span><p class="ds-price-count">${icon('fileText', 14)}${esc(c.count)}</p></li>`).join('')}</ul>
 <div class="ds-price-list" role="table" aria-label="Generac jobs without a reported median"><div class="ds-price-row ds-price-row--head" role="row"><span role="columnheader">Job</span><span role="columnheader">Reported median, or what drives the price</span><span role="columnheader">Permit needed?</span></div>${rows}</div>
 ${noteline('Permit values are the reported construction value for the whole project, not a quote.')}
 <div class="ds-sub ds-drivers"><div class="ds-drivers-rail"><p class="ds-eyebrow">${d.drivers.length} cost drivers</p><h3 class="ds-h3">What moves the price</h3><figure class="ds-photo ds-photo--tall"><img src="${img(base, d.driversPhoto.src)}" alt="${esc(d.driversPhoto.alt)}" title="${esc(d.driversPhoto.label)}" loading="lazy" decoding="async"></figure><p class="ds-meta">${esc(d.driversPhoto.label)}</p></div>
@@ -293,7 +292,7 @@ ${noteline('Permit values are the reported construction value for the whole proj
 // ---------- What the estimate covers ----------
 export function scope(d, base) {
   const list = (items) => `<ul>${items.map((t) => `<li><span class="ds-scope-bullet">${icon('check', 14)}</span><span>${esc(t)}</span></li>`).join('')}</ul>`;
-  const docs = d.handover.map((t, i) => `<li class="ds-doc"><div class="ds-doc-top">${badge(['fileCheck', 'clipboardCheck', 'tag', 'list', 'fileText', 'award', 'cpu'][i % 7], 48, 'navy')}<span>${String(i + 1).padStart(2, '0')}</span></div><h3 class="ds-h6">${esc(t)}</h3></li>`).join('');
+  const docs = d.handover.map(([t, x], i) => `<li class="ds-doc"><div class="ds-doc-top">${badge(['fileCheck', 'clipboardCheck', 'tag', 'list', 'fileText', 'award', 'cpu'][i % 7], 48, 'navy')}<span>${String(i + 1).padStart(2, '0')}</span></div><h3 class="ds-h6">${esc(t)}</h3><p class="pv-doc-text">${esc(x)}</p></li>`).join('');
   const w = d.warranties.map((r) => `<li>${badge(r.icon, 48)}<h3 class="ds-h6">${esc(r.item)}</h3><p class="ds-warranty-party">${esc(r.party)}</p></li>`).join('');
   return band('white', 'whats-included', `<div class="ds-wrap">
 ${headBlock({ eyebrow: 'Scope & handover', title: 'What the estimate covers', id: 'whats-included-title', lede: d.lede })}

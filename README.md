@@ -31,7 +31,7 @@ python -m http.server 8720 --directory docs
 
 ## Open items for review
 
-- **Logos.** Official logos are on file for Tesla, ChargePoint, Eaton, Emporia, Enphase, GE, Leviton, Siemens, SolarEdge, Square D and Wallbox. Every other brand, Generac included, shows its name with "Logo pending" until an official logo is sourced and registered.
+- **Logos.** All 58 brands show their own mark (`docs/images/logos/`, sources in `SOURCES.md` there). Most come from the brand's site or Wikipedia / Wikimedia Commons. Broan, BRK, Challenger, Cutler-Hammer, Hampton Bay, Harbor Breeze, Murray, Pushmatic and Zinsco come from a retailer, distributor or dealer copy or a label photo, so verify them against the owners' brand files before production.
 - **Generator photos.** No Highlights generator job photos exist yet. The page shows one illustrative standby unit, and panel, meter and service photos from Highlights Chicago's Yelp page, each with its credit.
 - **Facts.** Only verified (`live`) facts are used. These stay off the page until they are confirmed: BBB rating, bonding, suburban registration numbers, founder's full name, written scope on every job, salaried crews and diagnose-first.
 - **Incentives.** The incentives line cites two IRS pages, both read on 2026-10-26. ComEd's rebate pages could not be read that day, so they are not cited.

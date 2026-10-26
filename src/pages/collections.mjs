@@ -20,7 +20,7 @@ function brandIntro(b) {
 }
 
 const logoChip = (b, base) => b.logo
-  ? `<div class="pv-logo-chip"><img src="${base}images/logos/${b.logo}" alt="${esc(b.name)} logo"></div>`
+  ? `<div class="pv-logo-chip${b.logoAspect < 2.6 ? ' pv-logo-chip--tall' : ''}"><img src="${base}images/logos/${b.logo}" alt="${esc(b.name)} logo"></div>`
   : `<div class="pv-logo-chip pv-logo-chip--name" title="Official logo not on file yet"><b>${esc(b.name)}</b><small>Logo pending</small></div>`;
 
 function card({ href, img, alt, area, title, text, cta, pos, badgeHtml = '', media = '' }) {

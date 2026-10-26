@@ -1,5 +1,6 @@
 // Brand pages from the "Brand Pages" tab of the internal content plan, read 2026-10-26.
 // Rows keep the sheet's order (highest keyword volume first). The brand is the first word(s) of each title.
+import fs from 'fs';
 
 // Product categories: card photo, hub grouping, and the line each card uses.
 export const CATEGORIES = {
@@ -39,12 +40,27 @@ const COPY = {
   disposal: '{b} garbage disposals wired to a switched outlet or hardwired under the sink.',
 };
 
-// Official logos on file (official wordmarks with provenance). Others show the name until a logo is sourced.
-const LOGOS = {
-  tesla: 'logo-tesla.svg', chargepoint: 'logo-chargepoint.svg', eaton: 'logo-eaton.svg', emporia: 'logo-emporia.png',
-  enphase: 'logo-enphase.svg', ge: 'logo-ge.svg', leviton: 'logo-leviton.svg', siemens: 'logo-siemens.svg',
-  solaredge: 'logo-solaredge.svg', 'square-d': 'logo-square-d.svg', wallbox: 'logo-wallbox.png',
-};
+// Brand logos on file: images/logos/logo-<slug>.svg|png (sources in images/logos/SOURCES.md).
+// A brand without a file shows its name until a logo is added.
+const LOGO_DIR = new URL('../static/images/logos/', import.meta.url);
+const LOGOS = Object.fromEntries(fs.readdirSync(LOGO_DIR)
+  .filter((f) => /^logo-.+\.(svg|png)$/.test(f))
+  .map((f) => [f.replace(/^logo-|\.(svg|png)$/g, ''), f]));
+
+// Width / height of a logo file, so compact marks get a taller slot.
+function logoAspect(file) {
+  const buf = fs.readFileSync(new URL(file, LOGO_DIR));
+  if (file.endsWith('.png')) return buf.readUInt32BE(16) / buf.readUInt32BE(20);
+  const head = buf.toString('utf8', 0, 2000);
+  const vb = head.match(/viewBox="([^"]+)"/);
+  if (vb) {
+    const [, , w, h] = vb[1].trim().split(/[\s,]+/).map(Number);
+    return w / h;
+  }
+  const w = parseFloat((head.match(/\swidth="([\d.]+)/) || [])[1]);
+  const h = parseFloat((head.match(/\sheight="([\d.]+)/) || [])[1]);
+  return w && h ? w / h : 3;
+}
 
 // Brand display names where the sheet's spelling differs from the maker's.
 const DISPLAY = { 'cutler-hammer': 'Cutler-Hammer', 'minka-aire': 'Minka-Aire', span: 'SPAN', cat: 'Cat' };
@@ -135,7 +151,7 @@ export const BRANDS = (() => {
   const map = new Map();
   for (const [brand, keyword, title, cat] of ROWS) {
     const slug = slugify(brand);
-    if (!map.has(slug)) map.set(slug, { slug, name: DISPLAY[slug] || brand, sheetName: brand, logo: LOGOS[slug] || null, removed: REMOVED.has(slug), services: [] });
+    if (!map.has(slug)) map.set(slug, { slug, name: DISPLAY[slug] || brand, sheetName: brand, logo: LOGOS[slug] || null, logoAspect: LOGOS[slug] ? logoAspect(LOGOS[slug]) : null, removed: REMOVED.has(slug), services: [] });
     const b = map.get(slug);
     const svcSlug = slugify(keyword.replace(/ near me$/, ''));
     const copyKey = cat === 'panel' && b.removed ? 'panelRemoved' : cat;

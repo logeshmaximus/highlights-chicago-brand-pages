@@ -148,7 +148,7 @@ export const PAGE = {
   brands: {
     title: 'Generac, and the panels its switches connect to',
     lede: 'Generac makes the unit, the transfer switch and the load modules. The panel it ties into can be any make, and these are common in Chicago basements.',
-    logos: [{ name: 'Generac' }, { name: 'Square D', src: 'images/logos/logo-square-d.svg' }, { name: 'Siemens', src: 'images/logos/logo-siemens.svg' }, { name: 'Eaton', src: 'images/logos/logo-eaton.svg' }, { name: 'GE', src: 'images/logos/logo-ge.svg' }],
+    logos: [{ name: 'Generac', src: 'images/logos/logo-generac.png' }, { name: 'Square D', src: 'images/logos/logo-square-d.svg' }, { name: 'Siemens', src: 'images/logos/logo-siemens.svg' }, { name: 'Eaton', src: 'images/logos/logo-eaton.svg' }, { name: 'GE', src: 'images/logos/logo-ge.svg' }],
     note: 'Highlights Chicago works on every panel make, and the Generac switch is chosen to match the panel in the house.',
   },
 
@@ -224,16 +224,20 @@ export const PAGE = {
 
   pricing: {
     title: 'What Generac generator installation costs in Chicago',
-    lede: 'Chicago recorded 78 permits for permanent or standby generators in the 24 months to September 2026, too few for a fair median. So the table prices Generac work by what drives it.',
+    lede: 'Chicago recorded 78 permits for permanent or standby generators in the 24 months to September 2026, too few for a fair median. The cards show the service medians that apply when a Generac hookup also needs a bigger service; the table prices the rest by what drives it.',
     source: 'Reported construction value on City of Chicago Electrical Work permits, issued October 2024 to September 2026. Source: City of Chicago building permit data.',
-    featured: { label: 'Service or panel upgrade, when the hookup needs one: 4,337 with a value', value: '$4,200', count: '4,339 permits' },
+    cards: [
+      { label: 'Service or panel upgrade, when the hookup needs one: 4,337 with a value', value: '$4,200', count: '4,339 permits', fill: 0.525 },
+      { icon: 'zap', label: 'Permits listing a new 200-amp service: 2,037 with a value', value: '$5,000', count: '2,038 permits', fill: 0.625 },
+      { icon: 'building', label: 'Permits listing a new 201 to 400-amp service: 386 with a value', value: '$8,000', count: '386 permits', fill: 1 },
+    ],
     rows: [
       { icon: 'zap', job: 'New Generac standby generator', driver: 'Too few costed permits for a median; the model size, the switch and the feeder length set the price', permit: 'yes' },
       { icon: 'split', job: 'Automatic transfer switch on its own', driver: 'Switch rating, service size and where it mounts', permit: 'yes' },
       { icon: 'sliders', job: 'Load management modules', driver: 'How many large loads are managed, and where they sit', permit: 'yes' },
       { icon: 'refresh', job: 'Replacing an existing Generac', driver: 'New size against old, and whether the switch and pad can stay', permit: 'yes' },
       { icon: 'wrench', job: 'Generac repair on the electrical side', driver: 'The fault found: switch, breaker, battery charger circuit or wiring', permit: 'sometimes' },
-      { icon: 'battery', job: 'Generac PWRcell battery instead', driver: 'Battery capacity and the circuits it carries', permit: 'yes' },
+      { icon: 'battery', job: 'Generac PWRcell battery instead', driver: '$16,522 median for solar and battery storage combined, 4,549 with a value; battery capacity and the circuits it carries set the price', permit: 'yes' },
     ],
     drivers: [
       ['Generac model and kilowatts', 'Sets the unit, the pad and the gas demand', 'Once the load calculation is done'],
@@ -260,7 +264,15 @@ export const PAGE = {
     inNote: 'A typical job. The walkthrough decides what a specific home needs.',
     separate: ['Gas line and its permit', 'Panel or service upgrade', 'Essential-circuit subpanel', 'Load management modules', 'Trenching under a walk or yard', 'Carbon monoxide alarms indoors'],
     outNote: 'Added only where the walkthrough shows the home needs it.',
-    handover: ['City permit number', 'Passed City inspection', 'Labeled transfer switch', 'List of circuits on backup', 'Generac owner’s manual and maintenance schedule', 'Generac warranty registration details', 'Mobile Link set up, if the household wants it'],
+    handover: [
+      ['City permit number', 'The number the City files the job under. A buyer, an insurer or a future electrician can look it up.'],
+      ['Passed City inspection', 'The inspector’s sign-off on the electrical work: the switch, the feeder and the grounding.'],
+      ['Labeled transfer switch', 'Marked with what it serves and how to set it, so anyone in the house can operate it in the dark.'],
+      ['List of circuits on backup', 'Which breakers stay live in an outage, posted at the panel where it is easy to find.'],
+      ['Generac owner’s manual and maintenance schedule', 'The manual for this model, and the service plan the household agreed to follow.'],
+      ['Generac warranty registration details', 'The model and serial number, the startup date and the registration Generac asks for.'],
+      ['Mobile Link set up, if the household wants it', 'The unit paired to a phone, with alerts going to whoever looks after the house.'],
+    ],
     handoverPhoto: { src: 'images/yelp/yelp-040.jpg', alt: 'New electrical meters in a bank on a sided wall with conduit runs', credit: 'Photo: George A. on Yelp' },
     warranties: [
       { icon: 'zap', item: 'Generac generator', party: 'Generac, under its limited warranty for the model. Registration terms are in Generac’s warranty statement.' },
@@ -291,7 +303,7 @@ export const PAGE = {
     cta: 'Book a Generac visit',
     ready: [['camera', 'A photo of the main panel with its label readable'], ['gauge', 'A photo of the gas meter'], ['pin', 'Where the Generac would sit'], ['list', 'A list of what must run in an outage'], ['tag', 'The model and serial label of any existing generator']],
     brandsLabel: 'Generac and the panels it connects to',
-    logos: [{ name: 'Generac' }, { name: 'Square D', src: 'images/logos/logo-square-d.svg' }, { name: 'Siemens', src: 'images/logos/logo-siemens.svg' }, { name: 'Eaton', src: 'images/logos/logo-eaton.svg' }, { name: 'GE', src: 'images/logos/logo-ge.svg' }],
+    logos: [{ name: 'Generac', src: 'images/logos/logo-generac.png' }, { name: 'Square D', src: 'images/logos/logo-square-d.svg' }, { name: 'Siemens', src: 'images/logos/logo-siemens.svg' }, { name: 'Eaton', src: 'images/logos/logo-eaton.svg' }, { name: 'GE', src: 'images/logos/logo-ge.svg' }],
   },
 
   guides: {
@@ -334,7 +346,7 @@ export const PAGE = {
           'The usual pitch picks one by habit. A gas generator runs as long as the gas flows, but it needs a pad, clearances and a gas line. A battery needs none of those, but it holds a fixed amount of energy.',
           'The shift is that most Chicago outages are short, while the costly ones are long winter events. A battery covers the first kind quietly. Only a generator, or a battery with solar recharging it, covers a multi-day outage.',
           `Highlights Chicago wires both, so a household can price a PWRcell against a standby Generac on the same panel. The battery side has its own page: [solar battery installation in Chicago](${L3_BATTERY}).`,
-          'The City’s records show how common batteries already are. Chicago issued 4,549 solar and battery storage permits in the 24 months to September 2026, against fewer than 100 for permanent generators.',
+          'Either way, the tie-in lands at the main panel, the work Highlights Chicago’s own record leans on most: 281 of its 486 stand-alone electrical permits are panel or service work.',
         ],
       },
     ],
