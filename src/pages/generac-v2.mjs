@@ -31,7 +31,7 @@ export const PAGE = {
     mobile: {
       h1: 'Generac Generator Installation & Repair',
       lede: 'Load calculation, transfer switch, permitted feeder and a tested startup, from a City of Chicago licensed electrical contractor.',
-      values: [['Free', 'Estimates'], ['24/7', 'Open every day'], ['#30', 'Chicago permit rank']],
+      values: [['Free', 'Estimates'], ['24/7', 'Open every day'], ['Top 13%', 'Chicago permit volume']],
       symptomsHeading: 'What is the Generac doing?',
       symptoms: ['Won’t start', 'Runs, house dark', 'Red alarm light', 'New install', 'Maintenance'],
     },
@@ -100,11 +100,11 @@ export const PAGE = {
     eyebrow: 'What it costs · variable prices',
     title: 'What Generac work costs in Chicago',
     intro: 'Prices move with the unit size, the switch type and the run from the pad to the panel, so each one is a range.',
-    confirm: 'CONFIRM: prices come from the pricing artifact',
+    confirm: 'CONFIRM: the prices still marked pending',
     pendingLabel: 'Price pending',
     fees: [
       { label: 'Estimate visit', value: 'Free', note: 'Highlights Chicago gives free estimates. A price for one house needs a look at the panel, the meter and the spot.' },
-      { key: 'install', label: 'New Generac standby install', note: 'Set by the model size, the switch and the feeder length.' },
+      { key: 'install', label: 'New Generac standby install', note: 'Median reported construction value on 161 City generator permits, not a quote. The model size, the switch and the feeder length move it.' },
       { key: 'repairVisit', label: 'Generac repair visit', note: 'The electrical side: switch, breaker, battery charger circuit or wiring.' },
     ],
     tableHead: ['Common Generac jobs', 'Price'],
@@ -122,8 +122,8 @@ export const PAGE = {
       foot: 'Neither IRS home energy credit page lists a standby generator (read October 26, 2026). [IRS: Residential Clean Energy Credit](https://www.irs.gov/credits-deductions/residential-clean-energy-credit)',
       cta: 'Get a price',
     },
-    medians: [['$4,200', 'median, service or panel upgrade (4,337 with a value)'], ['$5,000', 'median, new 200-amp service (2,037 with a value)'], ['$8,000', 'median, new 201 to 400-amp service (386 with a value)']],
-    source: 'City of Chicago permit medians are the reported construction value for the whole project, not a quote, for Electrical Work permits issued October 2024 to September 2026. Chicago recorded 78 permanent generator permits in that time, too few for a median of its own.',
+    medians: [['$15,000', 'median, generator permits (161 with a cost)'], ['$4,700', 'median, 200-amp service upgrade (2,862 with a cost)'], ['$10,000', 'median, 400-amp or larger service (382 with a cost)']],
+    source: 'Medians are the reported construction value for the whole project on City of Chicago electrical permits, August 2024 to August 2026, not a quote. Source: City of Chicago Building Permits.',
   },
 
   areas: {

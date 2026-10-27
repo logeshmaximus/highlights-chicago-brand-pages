@@ -101,7 +101,7 @@ export function pricing(d, prices) {
   }).join('') + (d.rows.length > 3 ? `<button type="button" class="v2-more-btn" data-more>See all ${d.rows.length} prices</button>` : '');
   const medians = d.medians.map(([v, l]) => `<div class="v2-median"><strong>${esc(v)}</strong><span>${esc(l)}</span></div>`).join('');
   const inc = d.included;
-  return section('pricing', '', `${head({ eyebrow: d.eyebrow, title: d.title, id: 'pricing-title', intro: d.intro, confirm: prices ? '' : d.confirm })}
+  return section('pricing', '', `${head({ eyebrow: d.eyebrow, title: d.title, id: 'pricing-title', intro: d.intro, confirm: [...d.fees.filter((f) => !f.value), ...d.rows].some((r) => !P[r.key]) ? d.confirm : '' })}
 <div class="v2-track v2-fees v2-m-scroll" data-track>${fees}</div>
 <div class="v2-price-grid"><div class="v2-table"><div class="v2-table-head"><span>${esc(d.tableHead[0])}</span><span>${esc(d.tableHead[1])}</span></div>${rows}</div>
 <aside class="v2-included">${badge('shieldCheck', 44, 'navy', 20)}<h3>${esc(inc.title)}</h3><ul class="v2-checks">${inc.items.map((t) => `<li>${check()}<span>${esc(t)}</span></li>`).join('')}</ul>

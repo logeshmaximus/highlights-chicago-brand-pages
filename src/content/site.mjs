@@ -18,8 +18,8 @@ export const SITE = {
   yelp: { rating: '4.9', count: '307', url: 'https://www.yelp.com/biz/highlights-chicago-chicago-2' },
   licence: 'ECC96456',
   licence2: 'ECC94521',
-  permits: '1,223',
-  rank: '#30 of 1,535',
+  permits: '1,213',
+  rank: 'Top 13%',
 };
 
 // Service areas from profile.areas. Suburban registration numbers stay off the page

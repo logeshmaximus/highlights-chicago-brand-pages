@@ -32,7 +32,7 @@ python -m http.server 8720 --directory docs
 
 ## Open items for review
 
-- **Prices.** Every price on the Generac page shows "Price pending" until the pricing artifact is pasted into `src/content/pricing.mjs`. Only the free estimate is a confirmed fact.
+- **Prices and permits.** Figures come from the permit and cost sheet (`Highlights Chicago — Chicago Permit & Building Data.xlsx`, Aug 2024 to Aug 2026): medians of reported construction value on City permits, not quotes. The generator median is $15,000 on 161 permits; set it per page in `src/content/pricing.mjs`. Rows the sheet does not cover still show "Price pending".
 - **Scroll depth.** At 1440px the page is about 13,700px tall, down from 28,400px in the first version. On a 375px phone it is about 9,400px, down from 51,100px.
 
 - **Logos.** All 58 brands show their own mark (`docs/images/logos/`, sources in `SOURCES.md` there). Most come from the brand's site or Wikipedia / Wikimedia Commons. Broan, BRK, Challenger, Cutler-Hammer, Hampton Bay, Harbor Breeze, Murray, Pushmatic and Zinsco come from a retailer, distributor or dealer copy or a label photo, so verify them against the owners' brand files before production.
