@@ -19,7 +19,7 @@ const LABELS = {
   swipeHint: '',
   buildsNote: '',
   servicesEyebrow: '',
-  pendingLabel: 'Priced at the free estimate',
+  pendingLabel: 'Ask us for a price', terms: 'Terms and conditions apply',
   moreButton: 'See all {n} prices',
   reviewsEyebrow: '',
   reviewSource: 'Google review',
@@ -116,7 +116,7 @@ export function pricing(d, prices) {
   const val = (k) => (P[k] ? { text: P[k], pending: false } : { text: field(d.pendingLabel, 'pendingLabel'), pending: true });
   const fees = d.fees.map((f) => {
     const v = f.value ? { text: f.value, pending: false } : val(f.key);
-    return `<div class="v2-fee"><b>${esc(f.label)}</b><strong${v.pending ? ' class="is-pending"' : ''}>${esc(v.text)}</strong><p>${esc(f.note)}</p></div>`;
+    return `<div class="v2-fee"><b>${esc(f.label)}</b><strong${v.pending ? ' class="is-pending"' : ''}>${esc(v.text)}</strong>${f.value ? '' : `<small class="v2-terms">${esc(label(d, 'terms'))}</small>`}<p>${esc(f.note)}</p></div>`;
   }).join('');
   const rows = d.rows.map((r, i) => {
     const v = val(r.key);
@@ -126,7 +126,7 @@ export function pricing(d, prices) {
   const inc = d.included;
   return section('pricing', '', `${head({ eyebrow: d.eyebrow, title: d.title, id: 'pricing-title', intro: d.intro, confirm: [...d.fees.filter((f) => !f.value), ...d.rows].some((r) => !P[r.key]) ? d.confirm : '' })}
 <div class="v2-track v2-fees v2-m-scroll" data-track>${fees}</div>
-<div class="v2-price-grid"><div class="v2-table"><div class="v2-table-head"><span>${esc(d.tableHead[0])}</span><span>${esc(d.tableHead[1])}</span></div>${rows}</div>
+<div class="v2-price-grid"><div class="v2-table"><div class="v2-table-head"><span>${esc(d.tableHead[0])}</span><span>${esc(d.tableHead[1])}</span></div>${rows}<p class="v2-terms">${esc(label(d, 'terms'))}</p></div>
 <aside class="v2-included">${badge('shieldCheck', 44, 'navy', 20)}<h3>${esc(inc.title)}</h3><ul class="v2-checks">${inc.items.map((t) => `<li>${check()}<span>${esc(t)}</span></li>`).join('')}</ul>
 <div class="v2-included-foot"><b>${esc(inc.footTitle)}</b>${rich(inc.foot)}</div>
 <a class="ds-btn ds-btn--light ds-btn--block" href="#quote"><span>${esc(inc.cta)}</span>${icon('arrowRight', 18)}</a></aside></div>

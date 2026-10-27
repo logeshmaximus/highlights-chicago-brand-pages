@@ -101,11 +101,10 @@ export const PAGE = {
     title: 'What Generac work costs in Chicago',
     intro: 'Prices move with the unit size, the switch type and the run from the pad to the panel, so each one is a range.',
     confirm: 'CONFIRM: the prices still marked pending',
-    pendingLabel: 'Price pending',
     fees: [
       { label: 'Estimate visit', value: 'Free', note: 'Highlights Chicago gives free estimates. A price for one house needs a look at the panel, the meter and the spot.' },
       { key: 'install', label: 'New Generac standby install', note: 'Median reported construction value on 161 City generator permits, not a quote. The model size, the switch and the feeder length move it.' },
-      { key: 'repairVisit', label: 'Generac repair visit', note: 'The electrical side: switch, breaker, battery charger circuit or wiring.' },
+      { key: 'repairVisit', label: 'Generac repair visit', note: 'The typical small electrical job on City permits. We find what’s wrong first and confirm your price before any work.' },
     ],
     tableHead: ['Common Generac jobs', 'Price'],
     rows: [
