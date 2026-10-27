@@ -8,11 +8,34 @@ const img = (base, p) => (/^https?:/.test(p) ? p : base + p);
 const pos = (p) => (p ? ` style="object-position:${p}"` : '');
 const check = () => icon('check', 16);
 
+// Labels: each one reads its field (d.labels.<key>) and falls back to the design's text when the field
+// is empty, so a page with a blank or missing field still renders.
+const LABELS = {
+  heroCaption: '', // the design shows no caption on the hero photo
+  jumpTitle: 'On this page',
+  contactGroup: 'Contact details',
+  submit: 'Request service',
+  modelWork: 'The work on it',
+  swipeHint: '',
+  buildsNote: '',
+  servicesEyebrow: '',
+  pendingLabel: 'Priced at the free estimate',
+  moreButton: 'See all {n} prices',
+  reviewsEyebrow: '',
+  reviewSource: 'Google review',
+  reviewLink: 'View on Google',
+  reviewsHint: '',
+  workHint: '',
+};
+const blank = (v) => v === undefined || v === null || v === '';
+const label = (d, key) => (blank(d?.labels?.[key]) ? LABELS[key] : d.labels[key]);
+const field = (v, key) => (blank(v) ? LABELS[key] : v);
+
 function head({ eyebrow, title, id, intro, confirm }) {
-  return `<div class="v2-head"><div class="ds-head-main"><p class="ds-eyebrow">${esc(eyebrow)}</p><h2 class="ds-h2" id="${id}">${esc(title)}</h2></div>${intro || confirm ? `<div>${intro ? `<p class="v2-intro">${rich(intro)}</p>` : ''}${confirm ? `<span class="v2-confirm">${esc(confirm)}</span>` : ''}</div>` : ''}</div>`;
+  return `<div class="v2-head"><div class="ds-head-main">${blank(eyebrow) ? '' : `<p class="ds-eyebrow">${esc(eyebrow)}</p>`}<h2 class="ds-h2" id="${id}">${esc(title)}</h2></div>${intro || confirm ? `<div>${intro ? `<p class="v2-intro">${rich(intro)}</p>` : ''}${confirm ? `<span class="v2-confirm">${esc(confirm)}</span>` : ''}</div>` : ''}</div>`;
 }
 const section = (key, tone, inner) => `<section class="v2-band${tone ? ` v2-band--${tone}` : ''}" id="${key}" aria-labelledby="${key}-title"><div class="ds-wrap">${inner}</div></section>`;
-const trackNav = (hint) => `<div class="v2-track-nav"><span class="v2-track-hint">${esc(hint)}</span><div class="v2-track-arrows"><button type="button" data-prev aria-label="Previous">${icon('arrowLeft', 18)}</button><button type="button" data-next aria-label="Next">${icon('arrowRight', 18)}</button></div></div>`;
+const trackNav = (hint) => `<div class="v2-track-nav">${blank(hint) ? '<span></span>' : `<span class="v2-track-hint">${esc(hint)}</span>`}<div class="v2-track-arrows"><button type="button" data-prev aria-label="Previous">${icon('arrowLeft', 18)}</button><button type="button" data-next aria-label="Next">${icon('arrowRight', 18)}</button></div></div>`;
 
 // ---------- Hero: form first, ratings above the H1, jump list ----------
 export function hero(d, base) {
@@ -27,7 +50,7 @@ export function hero(d, base) {
 <div class="ds-hero-scrim" aria-hidden="true"></div>
 <div class="ds-wrap ds-hero-grid"><div class="ds-hero-copy">
 <nav class="ds-crumbs" aria-label="Breadcrumb"><ol>${crumbs}</ol></nav>
-<p class="ds-eyebrow ds-eyebrow--light">${esc(d.eyebrow)}</p>
+${blank(d.eyebrow) ? '' : `<p class="ds-eyebrow ds-eyebrow--light">${esc(d.eyebrow)}</p>`}
 ${ratings('dark')}
 <h1 class="ds-h1"><span class="pv-d">${esc(d.h1)}</span><span class="pv-m">${esc(d.mobile.h1)}</span></h1>
 <p class="ds-hero-lede"><span class="pv-d">${rich(d.lede, base)}</span><span class="pv-m">${esc(d.mobile.lede)}</span></p>
@@ -36,23 +59,23 @@ ${ratings('dark')}
 <div class="ds-cta-row"><a class="ds-btn ds-btn--light" href="tel:${SITE.tel}">${icon('phone', 18)}<span>Call ${SITE.phone}</span></a>
 <a class="ds-btn ds-btn--outline-light" href="#quote">${'<span>' + esc(d.cta) + '</span>'}${icon('arrowRight', 18)}</a></div>
 <div class="v2-symptoms pv-m"><p>${esc(d.mobile.symptomsHeading)}</p><ul>${d.mobile.symptoms.map((s) => `<li><a href="tel:${SITE.tel}">${esc(s)}</a></li>`).join('')}</ul></div>
-<nav class="v2-jump" aria-label="On this page"><div class="v2-jump-head"><b>On this page</b><span>${d.jump.length} sections</span></div><ul>${jump}</ul></nav>
+<nav class="v2-jump" aria-label="On this page"><div class="v2-jump-head"><b>${esc(label(d, 'jumpTitle'))}</b><span>${d.jump.length} sections</span></div><ul>${jump}</ul></nav>
 </div>
 <aside class="ds-form-card" id="quote" aria-labelledby="quote-title">
 <h2 class="ds-form-title" id="quote-title">${esc(f.title)}</h2><p class="ds-form-sub">${esc(f.sub)}</p>
 <form>
-<div class="ds-form-group" role="group" aria-labelledby="quote-g1"><p class="ds-form-group-title" id="quote-g1"><span class="ds-step-dot">1</span>Contact details</p>
+<div class="ds-form-group" role="group" aria-labelledby="quote-g1"><p class="ds-form-group-title" id="quote-g1"><span class="ds-step-dot">1</span>${esc(label(d, 'contactGroup'))}</p>
 <div class="ds-form-row"><div class="ds-field"><label for="q-name">Name</label><input id="q-name" autocomplete="name" name="name"></div>
 <div class="ds-field"><label for="q-phone">Phone</label><input id="q-phone" type="tel" autocomplete="tel" inputmode="tel" name="phone"></div></div>
 <div class="ds-field ds-field--icon"><label for="q-address">Street or cross streets</label><span class="ds-input-icon">${icon('pin', 18)}<input id="q-address" placeholder="e.g. Lincoln &amp; Foster" autocomplete="street-address" name="address"></span></div></div>
 <div class="ds-form-group" role="group" aria-labelledby="quote-g2"><p class="ds-form-group-title" id="quote-g2"><span class="ds-step-dot">2</span>${esc(f.group2)}</p>
 ${sel('q-existing', f.selectLabel, f.selectOptions)}
 <div class="ds-field" role="radiogroup" aria-labelledby="q-issue"><span class="ds-label" id="q-issue">${esc(f.question)}</span><div class="ds-chip-options">${chipOpts}</div></div></div>
-<button class="ds-btn ds-btn--primary ds-btn--block" type="submit"><span>Request service</span>${icon('arrowRight', 18)}</button>
+<button class="ds-btn ds-btn--primary ds-btn--block" type="submit"><span>${esc(label(d, 'submit'))}</span>${icon('arrowRight', 18)}</button>
 <p class="ds-form-note">${icon('circleCheck', 16)}<span>${rich(f.reply)}</span></p>
 </form></aside>
 </div>
-<span class="ds-pill-caption ds-hero-pill">Illustrative photo</span>
+${blank(label(d, 'heroCaption')) ? '' : `<span class="ds-pill-caption ds-hero-pill">${esc(label(d, 'heroCaption'))}</span>`}
 </header>
 <nav class="v2-tabsbar" aria-label="Jump to a section">${d.jump.map(([id, label]) => `<a href="#${id}">${esc(label)}</a>`).join('')}</nav>`;
 }
@@ -61,12 +84,12 @@ ${sel('q-existing', f.selectLabel, f.selectOptions)}
 export function models(d) {
   const cards = d.series.map((s) => `<article class="v2-model"><span class="v2-tag">${esc(s.tag)}</span><h3>${esc(s.name)}</h3><p>${esc(s.summary)}</p>
 <ul class="v2-chips">${s.models.map((m) => `<li>${esc(m)}</li>`).join('')}</ul>
-<div class="v2-wedo"><b>The work on it</b><ul class="v2-checks">${s.weDo.map((w) => `<li>${check()}<span>${esc(w)}</span></li>`).join('')}</ul></div></article>`).join('');
+<div class="v2-wedo"><b>${esc(label(d, 'modelWork'))}</b><ul class="v2-checks">${s.weDo.map((w) => `<li>${check()}<span>${esc(w)}</span></li>`).join('')}</ul></div></article>`).join('');
   const builds = d.builds.map((b) => `<li><strong>${esc(b.label)}</strong><em>${esc(b.name)}</em><p>${esc(b.text)}</p></li>`).join('');
   return section('models', 'alt', `${head({ eyebrow: d.eyebrow, title: d.title, id: 'models-title', intro: d.intro })}
 <div class="v2-track v2-models v2-m-scroll" data-track>${cards}</div>
-<div class="v2-track-nav pv-m"><span class="v2-track-hint">${esc(d.swipeHint)}</span></div>
-<div class="v2-builds"><div class="v2-builds-head"><h3>${esc(d.buildsHeading)}</h3><span class="pv-d">${esc(d.buildsNote)}</span></div><ol>${builds}</ol></div>`);
+<div class="v2-track-nav pv-m"><span class="v2-track-hint">${esc(field(d.swipeHint, 'swipeHint'))}</span></div>
+<div class="v2-builds"><div class="v2-builds-head"><h3>${esc(d.buildsHeading)}</h3><span class="pv-d">${esc(field(d.buildsNote, 'buildsNote'))}</span></div><ol>${builds}</ol></div>`);
 }
 
 // ---------- Services we do: tabs ----------
@@ -76,7 +99,7 @@ export function services(d) {
 <div class="v2-svc-side"><i>${String(i + 1).padStart(2, '0')}</i><h3>${esc(g.name)}</h3><p>${esc(g.summary)}</p></div>
 <ul class="v2-svc-grid">${g.services.map(([t, x]) => `<li class="v2-svc-card"><h4>${esc(t)}</h4><p>${rich(x)}</p></li>`).join('')}</ul></div>`).join('');
   const total = d.groups.reduce((n, g) => n + g.services.length, 0);
-  return section('services', '', `${head({ eyebrow: `${d.eyebrow} · ${total} in ${d.groups.length} groups`, title: d.title, id: 'services-title', intro: d.intro })}
+  return section('services', '', `${head({ eyebrow: blank(d.eyebrow) ? label(d, 'servicesEyebrow') : `${d.eyebrow} · ${total} in ${d.groups.length} groups`, title: d.title, id: 'services-title', intro: d.intro })}
 <div class="v2-tabs" role="tablist" aria-label="Service groups" data-tabs>${tabs}</div>${panels}`);
 }
 
@@ -84,13 +107,13 @@ export function services(d) {
 export function work(d, base) {
   const items = d.photos.map((p) => `<figure><img src="${img(base, p.src)}" alt="${esc(p.alt)}" loading="lazy" decoding="async"${pos(p.pos)}><figcaption>${esc(p.cap)}</figcaption></figure>`).join('');
   return section('work', 'alt', `${head({ eyebrow: d.eyebrow, title: d.title, id: 'work-title', intro: d.intro })}
-<div class="v2-scroll v2-work" data-track>${items}</div>${trackNav(d.hint)}`);
+<div class="v2-scroll v2-work" data-track>${items}</div>${trackNav(field(d.hint, 'workHint'))}`);
 }
 
 // ---------- What it costs: variable prices from the pricing artifact ----------
 export function pricing(d, prices) {
   const P = prices || {};
-  const val = (k) => (P[k] ? { text: P[k], pending: false } : { text: d.pendingLabel, pending: true });
+  const val = (k) => (P[k] ? { text: P[k], pending: false } : { text: field(d.pendingLabel, 'pendingLabel'), pending: true });
   const fees = d.fees.map((f) => {
     const v = f.value ? { text: f.value, pending: false } : val(f.key);
     return `<div class="v2-fee"><b>${esc(f.label)}</b><strong${v.pending ? ' class="is-pending"' : ''}>${esc(v.text)}</strong><p>${esc(f.note)}</p></div>`;
@@ -98,7 +121,7 @@ export function pricing(d, prices) {
   const rows = d.rows.map((r, i) => {
     const v = val(r.key);
     return `<div class="v2-table-row${i >= 3 ? ' v2-more' : ''}"><div><b>${esc(r.job)}</b><small>${esc(r.driver)}</small></div><span${v.pending ? ' class="is-pending"' : ''}>${esc(v.text)}</span></div>`;
-  }).join('') + (d.rows.length > 3 ? `<button type="button" class="v2-more-btn" data-more>See all ${d.rows.length} prices</button>` : '');
+  }).join('') + (d.rows.length > 3 ? `<button type="button" class="v2-more-btn" data-more>${esc(label(d, 'moreButton').replace('{n}', d.rows.length))}</button>` : '');
   const medians = d.medians.map(([v, l]) => `<div class="v2-median"><strong>${esc(v)}</strong><span>${esc(l)}</span></div>`).join('');
   const inc = d.included;
   return section('pricing', '', `${head({ eyebrow: d.eyebrow, title: d.title, id: 'pricing-title', intro: d.intro, confirm: [...d.fees.filter((f) => !f.value), ...d.rows].some((r) => !P[r.key]) ? d.confirm : '' })}
@@ -113,12 +136,12 @@ export function pricing(d, prices) {
 // ---------- Reviews: rating line and a swipe track ----------
 export function reviews(d) {
   const g = SITE.google, y = SITE.yelp;
-  const cards = d.items.map((r) => `<article class="v2-review"><header><span class="ds-avatar" aria-hidden="true">${esc(r.who[0])}</span><div><b>${esc(r.who)}</b><small>Google review, ${esc(r.date)}</small></div>${google(20)}</header>
-${stars(15)}<blockquote>“${esc(r.quote)}”</blockquote><a href="${esc(r.url)}" target="_blank" rel="noreferrer">View on Google</a></article>`).join('');
-  return section('reviews', '', `${head({ eyebrow: 'Google and Yelp reviews', title: d.title, id: 'reviews-title', intro: d.intro })}
+  const cards = d.items.map((r) => `<article class="v2-review"><header><span class="ds-avatar" aria-hidden="true">${esc(r.who[0])}</span><div><b>${esc(r.who)}</b><small>${esc(label(d, 'reviewSource'))}, ${esc(r.date)}</small></div>${google(20)}</header>
+${stars(15)}<blockquote>“${esc(r.quote)}”</blockquote><a href="${esc(r.url)}" target="_blank" rel="noreferrer">${esc(label(d, 'reviewLink'))}</a></article>`).join('');
+  return section('reviews', '', `${head({ eyebrow: label(d, 'reviewsEyebrow'), title: d.title, id: 'reviews-title', intro: d.intro })}
 <div class="v2-rating">${google(30)}<b>${g.rating}</b><span>${stars(16)} ${g.count} Google reviews</span>
 <div class="v2-rating-split"><a href="${esc(g.url)}" target="_blank" rel="noopener noreferrer">${google(16)}Google</a><a href="${esc(y.url)}" target="_blank" rel="noopener noreferrer">${yelp(16)}Yelp ${y.rating} · ${y.count}</a></div></div>
-<div class="v2-scroll v2-reviews" data-track>${cards}</div>${trackNav('Short excerpts from public Google reviews, each linked to the original')}`);
+<div class="v2-scroll v2-reviews" data-track>${cards}</div>${trackNav(label(d, 'reviewsHint'))}`);
 }
 
 // ---------- Where we work ----------
