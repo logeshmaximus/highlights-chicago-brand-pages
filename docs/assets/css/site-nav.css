@@ -20,7 +20,9 @@
 /* Main nav: white, 84px, 1px line under it */
 .sn-nav{position:relative;background:var(--sn-canvas);border-bottom:1px solid var(--sn-line)}
 .sn-nav-inner{position:relative;display:flex;align-items:center;gap:24px;min-height:84px}
-.sn-logo{display:flex;align-items:center;flex-shrink:0;margin-right:auto}
+.sn-logo{display:flex;align-items:center;flex-shrink:0;margin-right:19px}
+/* Links start where they do on the live nav (43px after the logo); the space the phone number used sits before Contact us. */
+.sn-actions{margin-left:auto}
 .sn-logo img{display:block;width:181px;height:44px;object-fit:contain}
 .sn-links{display:flex;align-items:center;gap:16px;margin:0;padding:0;list-style:none}
 .sn-links>li{display:flex;align-items:center}
