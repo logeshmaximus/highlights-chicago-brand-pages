@@ -1,11 +1,11 @@
-/* Site header: the live highlightschicago.com nav (service area pages, 2026-11-13) with two additions:
-   a Brands link and the Services menu. Nothing is made smaller: the header frame widens from 1200px
-   to 1260px so the extra link fits. Below that width the live nav's own states apply, a little earlier. */
+/* Site header: the live highlightschicago.com nav (service area pages, 2026-11-13) with two changes the
+   owner asked for: Brands takes the place of the nav-row phone number (the number is already in the navy
+   bar above), and Services opens the Services menu. Same 1200px frame and sizes as the live nav. */
 .sn{--sn-canvas:#FFFFFF;--sn-line:#E4E4E4;--sn-line-strong:#8F8F8F;--sn-ink:#181515;--sn-ink-soft:#454545;--sn-ink-muted:#6B6B6B;--sn-navy:#15202A;--sn-navy-line:#FFFFFF1A;--sn-on-navy-soft:#FFFFFFCC;--sn-on-navy-muted:#FFFFFF99;--sn-blue:#223D90;--sn-blue-deep:#182C69;--sn-green:#66B143;--sn-display:"Space Grotesk","Space Grotesk Fallback",system-ui,sans-serif;--sn-body:Inter,"Inter Fallback",system-ui,sans-serif;position:relative;z-index:40;font-family:var(--sn-body);-webkit-font-smoothing:antialiased}
 .sn *,.sn *::before,.sn *::after{box-sizing:border-box}
 .sn [hidden]{display:none!important}
 .sn :focus-visible{outline:3px solid color-mix(in srgb,var(--sn-blue) 45%,transparent);outline-offset:3px}
-.sn-wrap{width:min(var(--sn-frame,1260px),calc(100% - 48px));margin-inline:auto}
+.sn-wrap{width:min(var(--sn-frame,1200px),calc(100% - 48px));margin-inline:auto}
 .sn-icon{flex-shrink:0;display:block}
 
 /* Utility bar: navy, 44px, Inter 14, green icons */
@@ -82,9 +82,10 @@ a.sn-link:hover>span,a.sn-link:focus-visible>span{transform:translateX(26px)}
 .sn-btn--secondary{border:1px solid var(--sn-ink);color:var(--sn-ink)}
 .sn-sheet-addr{margin:0;text-align:center;font-size:14px;line-height:22px;color:var(--sn-ink-muted)}
 
-/* Where the 1260 frame no longer fits the window, the live nav's own narrower state takes over:
-   the nav-row phone number hides (it stays in the navy bar) and the link gaps go to 14px. */
-@media (max-width:1320px){.sn-phone{display:none}.sn-links{gap:14px}.sn-utility-group:first-child>:not(:first-child){display:none}}
+/* Desktop: no phone number in the nav row; Brands sits in its place. Below 1240 the live nav's 14px gaps apply. */
+@media (min-width:1131px){.sn-phone{display:none}}
+@media (max-width:1240px){.sn-links{gap:14px}}
+@media (max-width:1190px){.sn-utility-group:first-child>:not(:first-child){display:none}}
 /* Below 1130 the links no longer fit: menu sheet, a round call button first, then the menu button */
 @media (max-width:1130px){
   .sn-links,.sn-cta{display:none}
