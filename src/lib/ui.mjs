@@ -4,6 +4,9 @@ import { PATHS, RAW } from './icon-paths.mjs';
 import { SITE } from '../content/site.mjs';
 import { siteHeader } from './site-nav.mjs';
 
+// Added to every stylesheet and script URL so a browser never keeps an old copy after a rebuild.
+const BUILD = Date.now().toString(36);
+
 export const esc = (s = '') => String(s)
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
@@ -57,11 +60,11 @@ export function head({ title, description, canonical, base, extraHead = '' }) {
 <link rel="canonical" href="${esc(canonical)}">
 <link rel="icon" href="${base}icons/highlights-chicago-32.png" sizes="32x32">
 <link rel="apple-touch-icon" href="${base}icons/highlights-chicago-180.png">
-<link rel="stylesheet" href="${base}assets/css/inter.css">
-<link rel="stylesheet" href="${base}assets/css/ds.css">
-<link rel="stylesheet" href="${base}assets/css/site.css">
-<link rel="stylesheet" href="${base}assets/css/preview.css">
-<link rel="stylesheet" href="${base}assets/css/site-nav.css">
+<link rel="stylesheet" href="${base}assets/css/inter.css?v=${BUILD}">
+<link rel="stylesheet" href="${base}assets/css/ds.css?v=${BUILD}">
+<link rel="stylesheet" href="${base}assets/css/site.css?v=${BUILD}">
+<link rel="stylesheet" href="${base}assets/css/preview.css?v=${BUILD}">
+<link rel="stylesheet" href="${base}assets/css/site-nav.css?v=${BUILD}">
 ${extraHead}</head>`;
 }
 
@@ -142,5 +145,5 @@ export function hcFooter(base) {
 </div></footer>`;
 }
 
-export const scripts = (base) => `<script src="${base}assets/js/site.js" defer></script>
-<script src="${base}assets/js/site-nav.js" defer></script>`;
+export const scripts = (base) => `<script src="${base}assets/js/site.js?v=${BUILD}" defer></script>
+<script src="${base}assets/js/site-nav.js?v=${BUILD}" defer></script>`;
