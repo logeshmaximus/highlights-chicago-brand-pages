@@ -139,32 +139,63 @@ const ROWS = [
   ['Halo', 'halo recessed lighting installation', 'Halo Recessed Lighting Installation & Repair', 'recessed'],
 ];
 
-// Pages built so far. Every other card shows "Page in progress".
-export const BUILT = { 'generac-generator-installation': 'brands/generac/generac-generator-installation/' };
+// Brand service pages written and saved in Sanity (project x6yq02oi, type brandServiceLandingPageTemplate),
+// keyed by the sheet's primary keyword. The value is the page's Sanity slug. These are the pages that go live
+// first, so their brands sort to the top of every brand listing. On the live site this list is replaced by a
+// query for published pages.
+export const LIVE = {
+  'generac generator installation': 'generac-generator-installation-repair',
+  'tesla charger installation': 'tesla-ev-charger-installation-repair',
+  'ring doorbell installation': 'ring-video-doorbell-installation-repair',
+  'tesla powerwall installation': 'tesla-home-battery-installation-repair',
+  'nest doorbell installation': 'nest-video-doorbell-installation-repair',
+  'kohler generator installation': 'kohler-generator-installation-repair',
+  'tesla solar panel installation': 'tesla-solar-panels-installation-repair',
+  'chargepoint ev charger installation': 'chargepoint-ev-charger-installation-repair',
+  'ford charger installation': 'ford-ev-charger-installation-repair',
+  'enphase ev charger installation': 'enphase-ev-charger-installation-repair',
+};
+
+// Live URLs. The app is served under /services on highlightschicago.com, so brand pages sit below it.
+export const BRANDS_PATH = '/services/brands';
+export const brandUrl = (brandSlug) => `https://www.highlightschicago.com${BRANDS_PATH}/${brandSlug}`;
 
 const slugify = (s) => s.toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
 // Short card title: the sheet title without the brand at the front.
 const shortTitle = (title, brand) => title.slice(brand.length).trim();
 
+// Live pages first; the sheet order (keyword volume) is kept inside each tier. Array.prototype.sort is stable.
+const byLiveFirst = (a, b) => Number(b.live) - Number(a.live);
+
+// A brand whose pages are all live, then a brand with some live pages, then the rest.
+export const liveTier = (b) => (b.liveCount === 0 ? 2 : b.liveCount === b.services.length ? 0 : 1);
+
 export const BRANDS = (() => {
   const map = new Map();
-  for (const [brand, keyword, title, cat] of ROWS) {
+  ROWS.forEach(([brand, keyword, title, cat], row) => {
     const slug = slugify(brand);
-    if (!map.has(slug)) map.set(slug, { slug, name: DISPLAY[slug] || brand, sheetName: brand, logo: LOGOS[slug] || null, logoAspect: LOGOS[slug] ? logoAspect(LOGOS[slug]) : null, removed: REMOVED.has(slug), services: [] });
+    if (!map.has(slug)) map.set(slug, { slug, row, name: DISPLAY[slug] || brand, sheetName: brand, logo: LOGOS[slug] || null, logoAspect: LOGOS[slug] ? logoAspect(LOGOS[slug]) : null, removed: REMOVED.has(slug), services: [] });
     const b = map.get(slug);
-    const svcSlug = slugify(keyword.replace(/ near me$/, ''));
     const copyKey = cat === 'panel' && b.removed ? 'panelRemoved' : cat;
     const category = cat === 'backup' ? 'battery' : cat;
+    const pageSlug = LIVE[keyword] || slugify(keyword.replace(/ near me$/, ''));
     b.services.push({
-      title, keyword, cat: category,
-      slug: svcSlug,
+      title, keyword, cat: category, row,
+      slug: pageSlug,
+      live: Boolean(LIVE[keyword]),
+      href: LIVE[keyword] ? `${brandUrl(slug)}/${pageSlug}` : null,
       short: shortTitle(title, brand).replace(/^Electrical Panel/, 'Panel'),
       blurb: COPY[copyKey].replace('{b}', b.name),
-      path: BUILT[svcSlug] || null,
     });
+  });
+  const brands = [...map.values()];
+  for (const b of brands) {
+    b.services.sort(byLiveFirst);
+    b.liveCount = b.services.filter((s) => s.live).length;
   }
-  return [...map.values()];
+  // Every listing of brands uses this order.
+  return brands.sort((a, b) => liveTier(a) - liveTier(b) || a.row - b.row);
 })();
 
 // The category a brand is filed under on the hub: its first (highest-volume) service.

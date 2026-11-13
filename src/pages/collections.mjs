@@ -54,14 +54,15 @@ export function brandPage(b) {
   const base = '../../';
   const cat = CATEGORIES[brandCategory(b)];
   const n = b.services.length;
+  // Written pages first (b.services is in that order). A page not written yet sends the visitor to a quote.
   const cards = b.services.map((s) => {
     const c = CATEGORIES[s.cat];
     return card({
-      href: s.path ? `${base}${s.path}index.html` : null,
+      href: s.live ? s.href : `${SITE.live}/contact-us`,
       img: base + c.img, alt: `${s.title} in Chicago`, pos: c.pos,
-      area: s.path ? 'Chicago' : 'Page in progress',
+      area: 'Chicago',
       title: s.short, text: s.blurb,
-      cta: s.path ? 'View service' : 'Coming to this preview',
+      cta: s.live ? 'View service' : 'Get a quote',
     });
   }).join('\n');
   const body = `<section class="collection-hero collection-hero--photo">
@@ -91,7 +92,7 @@ ${cards}
     base,
     title: `${b.name} services in Chicago | Highlights Chicago`,
     description: `${brandIntro(b)}`.slice(0, 158),
-    canonical: `${SITE.live}/brands/${b.slug}`,
+    canonical: `${SITE.live}/services/brands/${b.slug}`,
     body,
   });
 }
@@ -99,25 +100,23 @@ ${cards}
 export function hubPage() {
   const base = '../';
   const total = BRANDS.reduce((n, b) => n + b.services.length, 0);
-  const groups = HUB_ORDER.map((key) => ({ key, brands: BRANDS.filter((b) => brandCategory(b) === key) })).filter((g) => g.brands.length);
-  const groupHtml = groups.map((g) => {
-    const c = CATEGORIES[g.key];
-    const cards = g.brands.map((b) => {
-      const bc = CATEGORIES[brandCategory(b)];
-      return card({
-        href: `${b.slug}/index.html`, img: base + bc.img, alt: `${b.name} services by Highlights Chicago`, pos: bc.pos,
-        area: plural(b.services.length, 'service'), title: b.name,
-        text: b.services.map((s) => s.short).join(' · '),
-        cta: 'Explore services',
-        media: b.logo
-          ? `<span class="collection-card-media pv-media-logo"><img src="${base}images/logos/${b.logo}" alt="${esc(b.name)} logo" loading="lazy"></span>`
-          : `<span class="collection-card-media collection-card-media-empty pv-media-name"><span>${esc(b.name)}</span></span>`,
-      });
-    }).join('\n');
-    return `<div class="pv-group" id="${g.key}"><div class="pv-group-head"><h3 class="pv-group-title">${esc(c.label)}</h3><span>${plural(g.brands.length, 'brand')}</span></div>
-<div class="collection-card-grid">
-${cards}
-</div></div>`;
+  // Equipment filters: kinds with written brand pages first, then the hub's usual order.
+  const hasLive = (key) => BRANDS.some((b) => b.services.some((s) => s.live && s.cat === key));
+  const keys = HUB_ORDER.filter((k) => BRANDS.some((b) => b.services.some((s) => s.cat === k)));
+  const filters = [...keys.filter(hasLive), ...keys.filter((k) => !hasLive(k))];
+  // BRANDS is in live-first order: brands whose pages are all written, then brands with some, then the rest.
+  const cards = BRANDS.map((b) => {
+    const bc = CATEGORIES[brandCategory(b)];
+    const cats = [...new Set(b.services.map((s) => s.cat))].join(' ');
+    return card({
+      href: `${b.slug}/index.html`, img: base + bc.img, alt: `${b.name} services by Highlights Chicago`, pos: bc.pos,
+      area: plural(b.services.length, 'service'), title: b.name,
+      text: b.services.map((s) => s.short).join(' · '),
+      cta: 'Explore services',
+      media: b.logo
+        ? `<span class="collection-card-media pv-media-logo"><img src="${base}images/logos/${b.logo}" alt="${esc(b.name)} logo" loading="lazy"></span>`
+        : `<span class="collection-card-media collection-card-media-empty pv-media-name"><span>${esc(b.name)}</span></span>`,
+    }).replace('<a class="collection-card', `<a data-cats="${cats}" class="collection-card`);
   }).join('\n');
   const body = `<section class="collection-hero collection-hero--photo">
 <img class="collection-hero-bg" src="${base}images/v3/photos/tech-panel-work.webp" alt="Electrician in a Highlights Chicago hard hat working on breakers in an open panel" decoding="async" fetchpriority="high">
@@ -136,16 +135,18 @@ ${cards}
 <div class="collection-wrap">
 <div class="collection-directory-heading"><div><p class="collection-kicker">Our brands</p>
 <h2 id="brand-directory-title">Choose a brand</h2></div>
-<p>Brands are grouped by what they make. A brand with several product lines sits under its main one and lists the rest on its page.</p></div>
-<nav class="pv-jump" aria-label="Brand groups">${groups.map((g) => `<a href="#${g.key}">${esc(CATEGORIES[g.key].label)}</a>`).join('')}</nav>
-${groupHtml}
+<p>Pick a kind of equipment to narrow the list. A brand with several product lines lists all of them on its page.</p></div>
+<div class="pv-jump pv-filter" role="group" aria-label="Filter brands by equipment"><button type="button" aria-pressed="true" data-cat="">All brands</button>${filters.map((k) => `<button type="button" aria-pressed="false" data-cat="${k}">${esc(CATEGORIES[k].label)}</button>`).join('')}</div>
+<div class="collection-card-grid" id="brand-grid">
+${cards}
+</div>
 </div>
 </section>`;
   return page({
     base,
     title: 'Electrical brands in Chicago | Highlights Chicago',
     description: `Generators, EV chargers, batteries, panels, fans and smart devices from ${BRANDS.length} brands, wired by Highlights Chicago, a City of Chicago licensed electrical contractor.`,
-    canonical: `${SITE.live}/brands`,
+    canonical: `${SITE.live}/services/brands`,
     body,
   });
 }

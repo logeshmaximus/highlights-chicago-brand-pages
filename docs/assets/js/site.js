@@ -138,3 +138,19 @@
     f.appendChild(p);
   }));
 })();
+
+// Brands hub: equipment chips filter the one brand listing; the listing keeps its order.
+(() => {
+  const chips = document.querySelector('.pv-filter');
+  const grid = document.getElementById('brand-grid');
+  if (!chips || !grid) return;
+  chips.addEventListener('click', (e) => {
+    const btn = e.target.closest('button');
+    if (!btn) return;
+    const cat = btn.dataset.cat;
+    chips.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+    grid.querySelectorAll('.collection-card').forEach((card) => {
+      card.hidden = Boolean(cat) && !(card.dataset.cats || '').split(' ').includes(cat);
+    });
+  });
+})();

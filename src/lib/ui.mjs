@@ -2,6 +2,7 @@
 // Class names follow the Highlights Chicago Design System v3 build so the copied CSS applies unchanged.
 import { PATHS, RAW } from './icon-paths.mjs';
 import { SITE } from '../content/site.mjs';
+import { siteHeader, menuCounts } from './site-nav.mjs';
 
 export const esc = (s = '') => String(s)
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -60,42 +61,23 @@ export function head({ title, description, canonical, base, extraHead = '' }) {
 <link rel="stylesheet" href="${base}assets/css/ds.css">
 <link rel="stylesheet" href="${base}assets/css/site.css">
 <link rel="stylesheet" href="${base}assets/css/preview.css">
+<link rel="stylesheet" href="${base}assets/css/site-nav.css">
 ${extraHead}</head>`;
 }
 
-const NAV = (base, current) => [
-  ['Home', SITE.live + '/'],
-  ['About us', SITE.live + '/about-us'],
-  ['Services', SITE.live + '/services'],
-  ['Brands', base + 'brands/index.html', 'brands'],
-  ['Service Areas', SITE.live + '/service-areas'],
-  ['Blog', SITE.live + '/blog'],
-  ['Learning Center', SITE.live + '/learning-center'],
-].map(([n, u, key]) => ({ n, u, current: key && key === current }));
 
 export function previewBar(base) {
-  return `<div class="pv-bar" role="note"><div class="pv-bar-inner"><b>Design preview</b><span>Not the live site. Forms do not submit, and every page is noindex.</span><a href="${base}index.html">All preview pages</a></div></div>`;
+  const n = menuCounts(base + 'brands/index.html');
+  return `<div class="pv-bar" role="note"><div class="pv-bar-inner"><b>Design preview</b><span>Not the live site. Forms do not submit, and every page is noindex. Brand service page links open once the brand page PR is live.</span>
+<label class="pv-toggle"><input type="checkbox" checked onchange="window.snSetPlanned&&window.snSetPlanned(this.checked)"> Show planned pages in the menus</label>
+<span class="pv-counts">Services menu: ${n.services.live} live · ${n.services.planned} planned. Brands menu: ${n.brands.live} written · ${n.brands.planned} planned.</span>
+<a href="${base}index.html">All preview pages</a></div></div>`;
 }
 
-// Service-page chrome (ds-*), as on the v3 service pages.
-export function dsHeader(base, current = 'brands', ctaLabel = 'Book Now') {
-  const links = NAV(base, current);
-  const a = (l) => `<a${l.current ? ' class="ds-nav-current" aria-current="page"' : ''} href="${esc(l.u)}">${l.n}</a>`;
+// Service-page chrome: the shared site header (src/lib/site-nav.mjs).
+export function dsHeader(base) {
   return `<a class="ds-skip" href="#main">Skip to content</a>
-<div class="ds-utility" aria-label="Business contact information"><div class="ds-wrap ds-utility-inner">
-<a href="${esc(SITE.mapsPlace)}">${icon('pin', 16)}${SITE.address}, United States</a><span class="ds-utility-sep" aria-hidden="true"></span>
-<span>${icon('clock', 16)}${SITE.hoursShort}</span><span class="ds-utility-spacer"></span>
-<a href="mailto:${SITE.email}">${icon('mail', 16)}${SITE.email}</a><span class="ds-utility-sep" aria-hidden="true"></span>
-<a class="ds-utility-phone" href="tel:${SITE.tel}">${icon('phone', 16)}${SITE.phone}</a>
-</div></div>
-<header class="ds-nav"><div class="ds-wrap ds-nav-inner">
-<a class="ds-nav-logo" href="${SITE.live}/" aria-label="Highlights Chicago home"><img src="${base}images/v3/logos/highlights-chicago-logo.webp" alt="Highlights Chicago Electrical Services" width="180" height="44"></a>
-<nav class="ds-nav-links" aria-label="Primary navigation">${links.map(a).join('')}</nav>
-<a class="ds-btn ds-btn--primary ds-btn--m ds-nav-cta" href="#quote"><span>${ctaLabel}</span></a>
-<a class="ds-nav-call" href="tel:${SITE.tel}" aria-label="Call ${SITE.phone}">${icon('phone', 18)}</a>
-<details class="ds-nav-mobile"><summary aria-label="Open navigation menu"><span></span><span></span><span></span></summary>
-<nav aria-label="Mobile navigation">${links.map(a).join('')}<a class="ds-btn ds-btn--primary ds-btn--block" href="tel:${SITE.tel}">${icon('phone', 16)}<span>Call ${SITE.phone}</span></a></nav></details>
-</div></header>`;
+${siteHeader({ logoSrc: `${base}images/v3/logos/highlights-chicago-logo.webp`, brandsHref: `${base}brands/index.html`, current: 'brands' })}`;
 }
 
 export function dsFooter(base) {
@@ -129,21 +111,9 @@ export function dsFooter(base) {
 </footer>`;
 }
 
-// Collection-page chrome (hc-*), as on the v3 category (cluster) pages.
+// Collection-page chrome: the same shared site header.
 export function hcHeader(base, current = 'brands') {
-  const links = NAV(base, current);
-  const a = (l) => `<a href="${esc(l.u)}"${l.current ? ' aria-current="page"' : ''}>${l.n}</a>`;
-  return `<div class="hc hc-header-stack">
-<div class="hc-utility" aria-label="Business contact information"><div class="hc-wrap hc-utility-inner">
-<div class="hc-utility-group"><a href="${esc(SITE.mapsPlace)}">${hcIcon('hcPin')}${SITE.address}, United States</a><span class="hc-utility-divider" aria-hidden="true"></span><span>${hcIcon('hcClock')}${SITE.hoursShort}</span></div>
-<div class="hc-utility-group"><a href="mailto:${SITE.email}">${hcIcon('hcMail')}${SITE.email}</a><span class="hc-utility-divider" aria-hidden="true"></span><a class="hc-utility-phone" href="tel:${SITE.tel}">${hcIcon('hcPhone')}${SITE.phoneShort}</a></div>
-</div></div>
-<header class="hc-nav"><div class="hc-wrap hc-nav-inner">
-<a class="hc-nav-logo" href="${SITE.live}/" aria-label="Highlights Chicago home"><img src="${base}images/v3/logos/highlights-chicago-logo.webp" alt="Highlights Chicago"></a>
-<nav class="hc-nav-links" aria-label="Primary navigation">${links.map(a).join('')}</nav>
-<div class="hc-nav-actions"><a class="hc-nav-phone" href="tel:${SITE.tel}">${hcIcon('hcPhone', 18)}${SITE.phone}</a><a class="hc-nav-cta" href="${SITE.live}/contact-us">Contact us</a>
-<details class="hc-nav-menu"><summary aria-label="Open navigation menu"><span></span><span></span><span></span></summary><nav aria-label="Mobile navigation">${links.map(a).join('')}</nav></details></div>
-</div></header></div>`;
+  return siteHeader({ logoSrc: `${base}images/v3/logos/highlights-chicago-logo.webp`, brandsHref: `${base}brands/index.html`, current });
 }
 
 export function hcFooter(base) {
@@ -176,4 +146,5 @@ export function hcFooter(base) {
 </div></footer>`;
 }
 
-export const scripts = (base) => `<script src="${base}assets/js/site.js" defer></script>`;
+export const scripts = (base) => `<script src="${base}assets/js/site.js" defer></script>
+<script src="${base}assets/js/site-nav.js" defer></script>`;

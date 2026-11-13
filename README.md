@@ -14,8 +14,21 @@ Every page is `noindex`, `robots.txt` disallows crawling, and canonical URLs poi
 |---|---|---|
 | Service landing page | `brands/generac/generac-generator-installation/` | The first title on the Brand Pages sheet, "Generac Generator Installation & Repair", in the form-first brand-page layout: quote form in the hero, models and services sections, a variable price section, and swipe rows instead of stacked cards. Planned live URL: `/services/generac-generator-installation/chicago`, under the generator installation page. |
 | First version | `brands/generac/generac-generator-installation-v1/` | The same page in the long v3 service-page order, kept for comparison. |
-| Brands hub | `brands/` | 58 brands, grouped by what they make |
-| Brand cluster pages | `brands/<brand>/` | One per brand, in the v3 category-page design, listing that brand's services from the sheet (69 in all). Only the Generac generator page is built; the other cards say "Page in progress". |
+| Brands hub | `brands/` | 58 brands in one listing. Brands whose pages are all written come first, then brands with some written pages, then the rest by keyword volume. Equipment chips narrow the list. |
+| Brand cluster pages | `brands/<brand>/` | One per brand, in the v3 category-page design, listing that brand's services from the sheet (69 in all). Written pages come first and link to their live URL; the rest link to the contact page. |
+
+## Site header (shared with the nav preview)
+
+Every page uses one header, `src/lib/site-nav.mjs` with `assets/css/site-nav.css` and `assets/js/site-nav.js`, built to the Design System v3 navigation spec (Paper file "Highlights Chicago Design System", page "Design System v3 · clean", artboard "09 · Navigation"):
+
+- Nav: Home, About Us, Services, Brands, Service Areas, Blog, Learning Center, then the Contact us pill. Seven links fill the 1200 frame, so on desktop the phone number sits in the utility bar; below 1100px the white menu sheet takes over, with a round call button.
+- Services menu (`src/content/nav.mjs`): four columns, live pages first. 12 pages that went live after 5 Nov now link to their nested URLs.
+- Brands menu: Generators, EV Chargers, Doorbells & Cameras, Solar & Batteries. The 10 written brand pages come first and link to `/services/brands/<brand>/<page>`.
+- Planned pages are plain grey text with a dashed ring. The preview bar switch hides them, as the live site will.
+
+`node src/build.mjs` also writes `../highlights-nav-dropdown/index.html` (the nav preview at https://logeshmaximus.github.io/highlights-chicago-services-dropdown/) when that checkout sits beside this one, so the two previews always show the same header.
+
+The written brand pages are listed in `LIVE` in `src/content/brands.mjs` (the Sanity slugs in project `x6yq02oi`). On the live site this list comes from the published pages in Sanity.
 
 ## Build
 

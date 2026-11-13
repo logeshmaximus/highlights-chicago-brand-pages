@@ -1,0 +1,111 @@
+/* Site header: utility bar, main nav, Services and Brands menus, phone sheet.
+   Highlights Chicago Design System v3 (Paper, "09 · Navigation" and the brand service page header).
+   Every value is a design-system token; nothing here depends on the page's own stylesheet. */
+.sn{--sn-canvas:#FFFFFF;--sn-line:#E4E4E4;--sn-line-strong:#8F8F8F;--sn-ink:#181515;--sn-ink-soft:#454545;--sn-ink-muted:#6B6B6B;--sn-navy:#15202A;--sn-navy-line:#FFFFFF1A;--sn-on-navy-soft:#FFFFFFCC;--sn-on-navy-muted:#FFFFFF99;--sn-blue:#223D90;--sn-blue-deep:#182C69;--sn-green:#66B143;--sn-display:"Space Grotesk","Space Grotesk Fallback",system-ui,sans-serif;--sn-body:Inter,"Inter Fallback",system-ui,sans-serif;position:relative;z-index:40;font-family:var(--sn-body);-webkit-font-smoothing:antialiased}
+.sn *,.sn *::before,.sn *::after{box-sizing:border-box}
+.sn [hidden]{display:none!important}
+.sn :focus-visible{outline:3px solid color-mix(in srgb,var(--sn-blue) 45%,transparent);outline-offset:3px}
+.sn-wrap{width:min(1200px,calc(100% - 48px));margin-inline:auto}
+.sn-icon{flex-shrink:0;display:block}
+
+/* Utility bar: navy, 44px, Inter 14, green icons */
+.sn-utility{background:var(--sn-navy);color:var(--sn-on-navy-soft)}
+.sn-utility-inner{display:flex;align-items:center;justify-content:space-between;gap:24px;min-height:44px;font-size:14px;line-height:20px}
+.sn-utility-group{display:flex;align-items:center;gap:24px}
+.sn-utility a,.sn-utility span{display:inline-flex;align-items:center;gap:8px;color:inherit;text-decoration:none;white-space:nowrap}
+.sn-utility .sn-icon{color:var(--sn-green)}
+.sn-sep{width:1px;height:16px;background:var(--sn-navy-line)}
+.sn-utility .sn-utility-phone{font-weight:600;color:#fff}
+
+/* Main nav: white, 84px, 1px line under it */
+.sn-nav{position:relative;background:var(--sn-canvas);border-bottom:1px solid var(--sn-line)}
+.sn-nav-inner{position:relative;display:flex;align-items:center;justify-content:space-between;gap:24px;height:84px}
+.sn-logo{display:flex;align-items:center;flex-shrink:0}
+.sn-logo img{display:block;width:181px;height:auto}
+.sn-links{display:flex;align-items:center;gap:24px;margin:0;padding:0;list-style:none}
+.sn-links>li{display:flex;align-items:center}
+.sn-top{font:500 15px/20px var(--sn-body);letter-spacing:.04em;text-transform:uppercase;color:var(--sn-ink);text-decoration:none;white-space:nowrap;transition:color .3s ease}
+.sn-top:hover,.sn-top.is-current,.sn-has-menu.is-open>.sn-top{color:var(--sn-blue)}
+.sn-chevron{appearance:none;display:grid;place-items:center;width:22px;height:44px;margin-left:2px;padding:0;border:0;background:none;color:var(--sn-ink);cursor:pointer;transition:color .3s ease}
+.sn-chevron .sn-icon{transition:transform .3s ease}
+.sn-has-menu:hover>.sn-chevron,.sn-top.is-current+.sn-chevron,.sn-chevron[aria-expanded=true]{color:var(--sn-blue)}
+.sn-chevron[aria-expanded=true] .sn-icon{transform:rotate(180deg)}
+.sn-actions{display:flex;align-items:center;gap:20px;flex-shrink:0}
+.sn-phone{display:inline-flex;align-items:center;gap:8px;font:600 16px/24px var(--sn-display);letter-spacing:.02em;color:var(--sn-ink);text-decoration:none;white-space:nowrap}
+.sn-phone .sn-icon{color:var(--sn-blue)}
+.sn-cta{display:inline-flex;align-items:center;height:44px;padding-inline:24px;border-radius:999px;background:var(--sn-blue);font:600 15px/20px var(--sn-display);letter-spacing:.02em;text-transform:uppercase;color:#fff;text-decoration:none;white-space:nowrap;transition:background .3s ease}
+.sn-cta:hover{background:var(--sn-blue-deep)}
+.sn-burger{display:none;appearance:none;place-content:center;gap:4px;width:44px;height:44px;padding:0;border:1px solid var(--sn-line-strong);border-radius:999px;background:none;cursor:pointer}
+.sn-burger span{display:block;width:18px;height:2px;background:var(--sn-ink);transition:transform .3s ease,opacity .3s ease}
+.sn-burger[aria-expanded=true]{background:var(--sn-ink);border-color:var(--sn-ink)}
+.sn-burger[aria-expanded=true] span{background:#fff}
+.sn-burger[aria-expanded=true] span:nth-child(1){transform:translateY(6px) rotate(45deg)}
+.sn-burger[aria-expanded=true] span:nth-child(2){opacity:0}
+.sn-burger[aria-expanded=true] span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
+
+/* Menu panel: navy, radius 4, no shadow, drops 20px into place */
+.sn-panel{position:absolute;top:100%;left:0;z-index:40;width:1000px;max-width:100%;max-height:calc(100vh - var(--sn-top,0px) - 16px);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#FFFFFF66 transparent;background:var(--sn-navy);color:#fff;border:1px solid var(--sn-navy-line);border-radius:4px;animation:sn-drop .3s ease}
+@keyframes sn-drop{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:none}}
+.sn-cols{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0 24px;padding:24px 30px 14px}
+.sn-col-head{margin:0 0 8px;padding-bottom:10px;border-bottom:1px solid var(--sn-navy-line);font:700 15px/20px var(--sn-body);letter-spacing:.08em;text-transform:uppercase;color:var(--sn-green)}
+.sn-items{margin:0;padding:0;list-style:none}
+.sn-link{position:relative;display:flex;align-items:center;min-height:28px;padding-block:4px;font-size:14px;line-height:20px;color:#fff;text-decoration:none;transition:color .3s ease}
+.sn-link>span{display:inline-block;transition:transform .3s ease}
+.sn-link::before{content:"";position:absolute;left:0;top:13px;width:16px;height:2px;background:var(--sn-green);opacity:0;transform:translateX(-10px);transition:transform .3s ease,opacity .3s ease}
+a.sn-link:hover,a.sn-link:focus-visible{color:var(--sn-green)}
+a.sn-link:hover::before,a.sn-link:focus-visible::before{opacity:1;transform:none}
+a.sn-link:hover>span,a.sn-link:focus-visible>span{transform:translateX(26px)}
+.sn-link--planned{color:var(--sn-on-navy-muted)}
+.sn-link--planned::before{display:none}
+.sn-link--planned i{flex-shrink:0;width:7px;height:7px;margin-left:8px;border:1.5px dashed currentColor;border-radius:50%}
+.sn[data-show-planned="0"] li[data-live="0"]{display:none}
+.sn-more{appearance:none;min-height:28px;margin-top:2px;padding:0;border:0;background:none;font:500 14px/20px var(--sn-body);color:var(--sn-green);text-decoration:underline 1px var(--sn-green);text-underline-offset:3px;cursor:pointer;transition:color .3s ease}
+.sn-more:hover{color:#fff}
+.sn-foot{position:sticky;bottom:0;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px 16px;padding:12px 30px;background:var(--sn-navy);border-top:1px solid var(--sn-navy-line);font-size:16px;line-height:24px}
+.sn-all{font-weight:500;color:#fff;text-decoration:underline 1px var(--sn-green);text-underline-offset:3px}
+.sn-call{display:flex;align-items:center;gap:8px;color:var(--sn-on-navy-muted)}
+.sn-call .sn-icon{color:var(--sn-green)}
+.sn-call a{font-weight:600;color:#fff;text-decoration:none;white-space:nowrap}
+
+/* Phone and tablet sheet: white, 56px rows, plus and minus in a fixed 24px slot */
+.sn-sheet{position:relative;z-index:30;background:var(--sn-canvas);border-bottom:1px solid var(--sn-line);max-height:calc(100vh - 72px);overflow-y:auto}
+.sn-sheet-rows{margin:0;padding:0;list-style:none}
+.sn-sheet-rows>li{border-bottom:1px solid var(--sn-line)}
+.sn-sheet-row{appearance:none;display:flex;align-items:center;justify-content:space-between;width:100%;min-height:56px;padding:0;border:0;background:none;font:500 15px/20px var(--sn-body);letter-spacing:.04em;text-transform:uppercase;text-align:left;color:var(--sn-ink);text-decoration:none;cursor:pointer}
+.sn-sheet-row[aria-expanded=true]{color:var(--sn-blue)}
+.sn-pm{position:relative;width:24px;height:24px;flex-shrink:0}
+.sn-pm::before,.sn-pm::after{content:"";position:absolute;left:5px;top:11px;width:14px;height:2px;background:currentColor}
+.sn-pm::after{transform:rotate(90deg)}
+[aria-expanded=true]>.sn-pm::after{display:none}
+.sn-sheet-sub{padding:0 0 10px 10px}
+.sn-sheet-cat{appearance:none;display:flex;align-items:center;justify-content:space-between;width:100%;min-height:44px;padding:0;border:0;background:none;font:400 16px/24px var(--sn-body);text-align:left;color:var(--sn-ink-soft);cursor:pointer}
+.sn-sheet-cat[aria-expanded=true]{font-weight:500;color:var(--sn-blue)}
+.sn-sheet .sn-items{padding:0 0 8px 10px}
+.sn-sheet .sn-link{min-height:44px;font-size:16px;line-height:24px;color:var(--sn-ink)}
+.sn-sheet .sn-link::before{display:none}
+.sn-sheet .sn-link--planned{color:var(--sn-ink-muted)}
+.sn-sheet-all{display:flex;align-items:center;min-height:44px;font-weight:500;color:var(--sn-blue);text-decoration:underline 1px var(--sn-green);text-underline-offset:3px}
+.sn-sheet-actions{display:grid;gap:10px;padding-block:20px}
+.sn-btn{display:flex;align-items:center;justify-content:center;gap:8px;height:52px;border-radius:999px;font:600 16px/24px var(--sn-display);letter-spacing:.02em;text-transform:uppercase;text-decoration:none}
+.sn-btn--primary{background:var(--sn-blue);color:#fff}
+.sn-btn--secondary{border:1px solid var(--sn-ink);color:var(--sn-ink)}
+.sn-sheet-addr{margin:0;text-align:center;font-size:14px;line-height:22px;color:var(--sn-ink-muted)}
+
+/* Seven links fill the 1200 frame, so on desktop the phone number lives in the utility bar above
+   (white, 600) and the nav keeps the Contact us pill. Narrower desktops tighten the gaps. */
+@media (min-width:1101px){.sn-phone{display:none}}
+@media (max-width:1260px){.sn-links{gap:16px}.sn-top{font-size:14px}.sn-logo img{width:150px}.sn-utility-group:first-child>:not(:first-child){display:none}}
+
+/* Below 1100 (seven links no longer fit): menu sheet, a round call button first, then the menu button */
+@media (max-width:1100px){
+  .sn-links,.sn-cta{display:none}
+  .sn-phone{display:grid;place-items:center;width:44px;height:44px;border-radius:999px;background:var(--sn-blue)}
+  .sn-phone>span{display:none}
+  .sn-phone .sn-icon{color:#fff}
+  .sn-burger{display:grid}
+  .sn-actions{gap:10px}
+}
+@media (min-width:1101px){.sn-sheet{display:none!important}}
+@media (max-width:768px){.sn-utility-inner{justify-content:center}.sn-utility-group:first-child{display:none}}
+@media (max-width:480px){.sn-wrap{width:calc(100% - 32px)}.sn-nav-inner{height:72px}.sn-logo img{width:148px}.sn-utility-group:last-child>.sn-sep,.sn-utility-group:last-child>a:first-child{display:none}}
+@media (prefers-reduced-motion:reduce){.sn-panel{animation:none}.sn-link,.sn-link>span,.sn-link::before,.sn-chevron .sn-icon,.sn-burger span{transition:none}}
