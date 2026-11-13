@@ -60,12 +60,13 @@ export function siteHeader({ logoSrc, brandsHref, current = null }) {
   // Brands has no menu: Brands -> the brands page -> a brand's page -> its brand service page.
   const plain = [
     ['Home', `${LIVE}/`],
-    ['About Us', `${LIVE}/about-us`],
+    ['About us', `${LIVE}/about-us`],
     SERVICES_MENU,
     ['Brands', brandsHref, 'brands'],
-    ['Service Areas', `${LIVE}/service-areas`],
+    ['Service areas', `${LIVE}/service-areas`],
+    ['Reviews', `${LIVE}/reviews`],
     ['Blog', `${LIVE}/blog`],
-    ['Learning Center', `${LIVE}/learning-center`],
+    ['Learning center', `${LIVE}/learning-center`],
   ];
   const isCur = (l) => Boolean(l[2]) && l[2] === current;
   const desktop = plain.map((l) => Array.isArray(l)
@@ -76,8 +77,8 @@ export function siteHeader({ logoSrc, brandsHref, current = null }) {
     : sheetMenu(l)).join('\n');
   return `<div class="sn">
 <div class="sn-utility" aria-label="Business contact information"><div class="sn-wrap sn-utility-inner">
-<div class="sn-utility-group"><a href="${esc(SITE.mapsPlace)}">${svg('pin')}${SITE.address}, United States</a><span class="sn-sep" aria-hidden="true"></span><span>${svg('clock')}${HOURS}</span></div>
-<div class="sn-utility-group"><a href="mailto:${SITE.email}">${svg('mail')}${SITE.email}</a><span class="sn-sep" aria-hidden="true"></span><a class="sn-utility-phone" href="tel:${SITE.tel}">${svg('phone')}${SITE.phoneShort}</a></div>
+<div class="sn-utility-group"><a href="${esc(SITE.mapsPlace)}">${svg('pin')}5766 N Lincoln Ave, Suite 1, Chicago, IL 60659, United States</a><span class="sn-sep" aria-hidden="true"></span><span>${svg('clock')}${HOURS}</span></div>
+<div class="sn-utility-group"><a href="mailto:${SITE.email}">${svg('mail')}${SITE.email}</a><span class="sn-sep" aria-hidden="true"></span><a class="sn-utility-phone" href="tel:${SITE.tel}">${svg('phone')}${SITE.phone}</a></div>
 </div></div>
 <header class="sn-nav"><div class="sn-wrap sn-nav-inner">
 <a class="sn-logo" href="${LIVE}/" aria-label="Highlights Chicago home"><img src="${esc(logoSrc)}" alt="Highlights Chicago Electrical Services" width="181" height="44"></a>

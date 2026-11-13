@@ -1,39 +1,39 @@
-/* Site header: utility bar, main nav with the Services menu and a Brands link, phone sheet.
-   Highlights Chicago Design System v3 (Paper, "09 · Navigation" and the brand service page header).
-   Every value is a design-system token; nothing here depends on the page's own stylesheet. */
+/* Site header: the live highlightschicago.com nav (service area pages, 2026-11-13) with two additions:
+   a Brands link and the Services menu. Nothing is made smaller: the header frame widens from 1200px
+   to 1280px so the extra link and the Services arrow fit. Below that width the live nav's own states apply, a little earlier. */
 .sn{--sn-canvas:#FFFFFF;--sn-line:#E4E4E4;--sn-line-strong:#8F8F8F;--sn-ink:#181515;--sn-ink-soft:#454545;--sn-ink-muted:#6B6B6B;--sn-navy:#15202A;--sn-navy-line:#FFFFFF1A;--sn-on-navy-soft:#FFFFFFCC;--sn-on-navy-muted:#FFFFFF99;--sn-blue:#223D90;--sn-blue-deep:#182C69;--sn-green:#66B143;--sn-display:"Space Grotesk","Space Grotesk Fallback",system-ui,sans-serif;--sn-body:Inter,"Inter Fallback",system-ui,sans-serif;position:relative;z-index:40;font-family:var(--sn-body);-webkit-font-smoothing:antialiased}
 .sn *,.sn *::before,.sn *::after{box-sizing:border-box}
 .sn [hidden]{display:none!important}
 .sn :focus-visible{outline:3px solid color-mix(in srgb,var(--sn-blue) 45%,transparent);outline-offset:3px}
-.sn-wrap{width:min(1200px,calc(100% - 48px));margin-inline:auto}
+.sn-wrap{width:min(var(--sn-frame,1280px),calc(100% - 48px));margin-inline:auto}
 .sn-icon{flex-shrink:0;display:block}
 
 /* Utility bar: navy, 44px, Inter 14, green icons */
 .sn-utility{background:var(--sn-navy);color:var(--sn-on-navy-soft)}
-.sn-utility-inner{display:flex;align-items:center;justify-content:space-between;gap:24px;min-height:44px;font-size:14px;line-height:20px}
+.sn-utility-inner{display:flex;align-items:center;justify-content:space-between;gap:24px;min-height:44px;font-size:14px;line-height:26px}
 .sn-utility-group{display:flex;align-items:center;gap:24px}
 .sn-utility a,.sn-utility span{display:inline-flex;align-items:center;gap:8px;color:inherit;text-decoration:none;white-space:nowrap}
 .sn-utility .sn-icon{color:var(--sn-green)}
 .sn-sep{width:1px;height:16px;background:var(--sn-navy-line)}
-.sn-utility .sn-utility-phone{font-weight:600;color:#fff}
+.sn-utility .sn-utility-phone{font-weight:600}
 
 /* Main nav: white, 84px, 1px line under it */
 .sn-nav{position:relative;background:var(--sn-canvas);border-bottom:1px solid var(--sn-line)}
-.sn-nav-inner{position:relative;display:flex;align-items:center;justify-content:space-between;gap:24px;height:84px}
-.sn-logo{display:flex;align-items:center;flex-shrink:0}
-.sn-logo img{display:block;width:181px;height:auto}
-.sn-links{display:flex;align-items:center;gap:24px;margin:0;padding:0;list-style:none}
+.sn-nav-inner{position:relative;display:flex;align-items:center;gap:24px;min-height:84px}
+.sn-logo{display:flex;align-items:center;flex-shrink:0;margin-right:auto}
+.sn-logo img{display:block;width:181px;height:44px;object-fit:contain}
+.sn-links{display:flex;align-items:center;gap:16px;margin:0;padding:0;list-style:none}
 .sn-links>li{display:flex;align-items:center}
-.sn-top{font:500 15px/20px var(--sn-body);letter-spacing:.04em;text-transform:uppercase;color:var(--sn-ink);text-decoration:none;white-space:nowrap;transition:color .3s ease}
+.sn-top{font:500 14px/14px var(--sn-body);letter-spacing:.02em;text-transform:uppercase;color:var(--sn-ink);text-decoration:none;white-space:nowrap;transition:color .3s ease}
 .sn-top:hover,.sn-top.is-current,.sn-has-menu.is-open>.sn-top{color:var(--sn-blue)}
-.sn-chevron{appearance:none;display:grid;place-items:center;width:22px;height:44px;margin-left:2px;padding:0;border:0;background:none;color:var(--sn-ink);cursor:pointer;transition:color .3s ease}
+.sn-chevron{appearance:none;display:grid;place-items:center;width:16px;height:44px;margin-left:2px;padding:0;border:0;background:none;color:var(--sn-ink);cursor:pointer;transition:color .3s ease}
 .sn-chevron .sn-icon{transition:transform .3s ease}
 .sn-has-menu:hover>.sn-chevron,.sn-top.is-current+.sn-chevron,.sn-chevron[aria-expanded=true]{color:var(--sn-blue)}
 .sn-chevron[aria-expanded=true] .sn-icon{transform:rotate(180deg)}
-.sn-actions{display:flex;align-items:center;gap:20px;flex-shrink:0}
-.sn-phone{display:inline-flex;align-items:center;gap:8px;font:600 16px/24px var(--sn-display);letter-spacing:.02em;color:var(--sn-ink);text-decoration:none;white-space:nowrap}
+.sn-actions{display:flex;align-items:center;gap:24px;flex-shrink:0}
+.sn-phone{display:inline-flex;align-items:center;gap:10px;font:500 17px/1 var(--sn-body);color:var(--sn-ink);text-decoration:none;white-space:nowrap}
 .sn-phone .sn-icon{color:var(--sn-blue)}
-.sn-cta{display:inline-flex;align-items:center;height:44px;padding-inline:24px;border-radius:999px;background:var(--sn-blue);font:600 15px/20px var(--sn-display);letter-spacing:.02em;text-transform:uppercase;color:#fff;text-decoration:none;white-space:nowrap;transition:background .3s ease}
+.sn-cta{display:inline-flex;align-items:center;height:44px;padding-inline:22px;border-radius:999px;background:var(--sn-blue);font:600 15px/20px var(--sn-display);letter-spacing:.02em;text-transform:uppercase;color:#fff;text-decoration:none;white-space:nowrap;transition:background .3s ease}
 .sn-cta:hover{background:var(--sn-blue-deep)}
 .sn-burger{display:none;appearance:none;place-content:center;gap:4px;width:44px;height:44px;padding:0;border:1px solid var(--sn-line-strong);border-radius:999px;background:none;cursor:pointer}
 .sn-burger span{display:block;width:18px;height:2px;background:var(--sn-ink);transition:transform .3s ease,opacity .3s ease}
@@ -86,13 +86,11 @@ a.sn-link:hover>span,a.sn-link:focus-visible>span{transform:translateX(26px)}
 .sn-btn--secondary{border:1px solid var(--sn-ink);color:var(--sn-ink)}
 .sn-sheet-addr{margin:0;text-align:center;font-size:14px;line-height:22px;color:var(--sn-ink-muted)}
 
-/* Seven links fill the 1200 frame, so on desktop the phone number lives in the utility bar above
-   (white, 600) and the nav keeps the Contact us pill. Narrower desktops tighten the gaps. */
-@media (min-width:1101px){.sn-phone{display:none}}
-@media (max-width:1260px){.sn-links{gap:16px}.sn-top{font-size:14px}.sn-logo img{width:150px}.sn-utility-group:first-child>:not(:first-child){display:none}}
-
-/* Below 1100 (seven links no longer fit): menu sheet, a round call button first, then the menu button */
-@media (max-width:1100px){
+/* Where the 1280 frame no longer fits the window, the live nav's own narrower state takes over:
+   the nav-row phone number hides (it stays in the navy bar) and the link gaps go to 14px. */
+@media (max-width:1340px){.sn-phone{display:none}.sn-links{gap:14px}.sn-utility-group:first-child>:not(:first-child){display:none}}
+/* Below 1150 the links no longer fit: menu sheet, a round call button first, then the menu button */
+@media (max-width:1150px){
   .sn-links,.sn-cta{display:none}
   .sn-phone{display:grid;place-items:center;width:44px;height:44px;border-radius:999px;background:var(--sn-blue)}
   .sn-phone>span{display:none}
@@ -100,7 +98,7 @@ a.sn-link:hover>span,a.sn-link:focus-visible>span{transform:translateX(26px)}
   .sn-burger{display:grid}
   .sn-actions{gap:10px}
 }
-@media (min-width:1101px){.sn-sheet{display:none!important}}
+@media (min-width:1151px){.sn-sheet{display:none!important}}
 @media (max-width:768px){.sn-utility-inner{justify-content:center}.sn-utility-group:first-child{display:none}}
 @media (max-width:480px){.sn-wrap{width:calc(100% - 32px)}.sn-nav-inner{height:72px}.sn-logo img{width:148px}.sn-utility-group:last-child>.sn-sep,.sn-utility-group:last-child>a:first-child{display:none}}
 @media (prefers-reduced-motion:reduce){.sn-panel{animation:none}.sn-link,.sn-link>span,.sn-link::before,.sn-chevron .sn-icon,.sn-burger span{transition:none}}
