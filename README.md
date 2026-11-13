@@ -25,7 +25,7 @@ Every page uses one header, `src/lib/site-nav.mjs` with `assets/css/site-nav.css
 - Services menu (`src/content/nav.mjs`): four columns of live pages only, exactly what visitors get. A planned page stays in the list with `0` and appears once it is published and set to `1` with its URL. 12 pages that went live after 5 Nov now link to their nested URLs.
 - Brands has no menu: Brands → the brands page → a brand's page → its brand service page (`/services/brands/<brand>/<page>`).
 
-`node src/build.mjs` also writes `../highlights-nav-dropdown/index.html` (the nav preview at https://logeshmaximus.github.io/highlights-chicago-services-dropdown/) when that checkout sits beside this one, so the two previews always show the same header.
+The old nav preview (https://logeshmaximus.github.io/highlights-chicago-services-dropdown/) now redirects here: this is the one preview for the header, the Services menu and the brand pages.
 
 The written brand pages are listed in `LIVE` in `src/content/brands.mjs` (the Sanity slugs in project `x6yq02oi`). On the live site this list comes from the published pages in Sanity.
 

@@ -7,7 +7,6 @@ import { BRANDS } from './content/brands.mjs';
 import { brandPage, hubPage, indexPage } from './pages/collections.mjs';
 import { generacPage } from './pages/generac.mjs';
 import { generacV2Page } from './pages/generac-v2.mjs';
-import { dropdownPage } from './pages/dropdown.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const out = path.join(root, 'docs');
@@ -29,13 +28,6 @@ for (const b of BRANDS) write(`brands/${b.slug}`, brandPage(b));
 // v2 (the senior's brand-page structure) is the page; v1 stays for comparison.
 write('brands/generac/generac-generator-installation', generacV2Page());
 write('brands/generac/generac-generator-installation-v1', generacPage());
-
-// The standalone nav preview shares this header; write it into its own repo when that checkout sits beside this one.
-const dropdownRepo = path.resolve(root, '..', 'highlights-nav-dropdown');
-if (fs.existsSync(path.join(dropdownRepo, '.git'))) {
-  fs.writeFileSync(path.join(dropdownRepo, 'index.html'), dropdownPage());
-  console.log(`Wrote the nav preview into ${path.relative(root, dropdownRepo)}/index.html`);
-}
 
 const pages = 4 + BRANDS.length;
 console.log(`Built ${pages} pages into ${path.relative(root, out)} (${BRANDS.length} brands, ${BRANDS.reduce((n, b) => n + b.services.length, 0)} brand services).`);
