@@ -36,7 +36,7 @@ function panel(menu) {
 function menuItem(menu, current) {
   const isCurrent = current === menu.key;
   return `<li class="sn-has-menu" data-menu="${menu.key}">
-<a class="sn-top${isCurrent ? ' is-current' : ''}" href="${esc(menu.href)}"${isCurrent ? ' aria-current="page"' : ''}>${menu.label}</a><button type="button" class="sn-chevron" aria-expanded="false" aria-controls="sn-panel-${menu.key}" aria-label="Show ${menu.label.toLowerCase()} menu">${svg('chevron', 14)}</button>
+<a class="sn-top${isCurrent ? ' is-current' : ''}" href="${esc(menu.href)}"${isCurrent ? ' aria-current="page"' : ''} aria-haspopup="true" aria-expanded="false" aria-controls="sn-panel-${menu.key}">${menu.label}</a>
 ${panel(menu)}
 </li>`;
 }

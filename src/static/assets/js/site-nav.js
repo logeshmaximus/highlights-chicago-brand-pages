@@ -29,24 +29,19 @@
     panel.style.setProperty('--sn-top', `${r.bottom}px`);
   }
   function setOpen(li, on) {
-    const btn = li.querySelector('.sn-chevron');
-    const label = li.dataset.menu;
     li.querySelector('.sn-panel').hidden = !on;
     li.classList.toggle('is-open', on);
-    btn.setAttribute('aria-expanded', String(on));
-    btn.setAttribute('aria-label', `${on ? 'Hide' : 'Show'} ${label} menu`);
+    li.querySelector('.sn-top').setAttribute('aria-expanded', String(on));
     if (on) place(li);
   }
   const isOpen = (li) => li.classList.contains('is-open');
   const closeAll = (except) => menus.forEach((m) => m !== except && isOpen(m) && setOpen(m, false));
 
   menus.forEach((li) => {
-    li.querySelector('.sn-chevron').addEventListener('click', (e) => {
-      e.stopPropagation();
-      clearTimeout(hoverT);
-      closeAll(li);
-      setOpen(li, !isOpen(li));
-    });
+    // The nav looks exactly like the live one (no arrow): the menu opens on hover and on keyboard focus;
+    // clicking Services still opens /services.
+    li.addEventListener('focusin', () => { clearTimeout(hoverT); closeAll(li); setOpen(li, true); });
+    li.addEventListener('focusout', (e) => { if (!li.contains(e.relatedTarget)) setOpen(li, false); });
     if (hover) {
       li.addEventListener('pointerenter', () => { clearTimeout(hoverT); hoverT = setTimeout(() => { closeAll(li); setOpen(li, true); }, 70); });
       li.addEventListener('pointerleave', () => { clearTimeout(hoverT); hoverT = setTimeout(() => setOpen(li, false), 240); });
@@ -65,7 +60,7 @@
   document.addEventListener('keydown', (e) => {
     if (e.key !== 'Escape') return;
     const open = menus.find(isOpen);
-    if (open) { setOpen(open, false); open.querySelector('.sn-chevron').focus(); }
+    if (open) { setOpen(open, false); open.querySelector('.sn-top').focus(); }
   });
   addEventListener('resize', () => menus.forEach((m) => isOpen(m) && place(m)));
 
