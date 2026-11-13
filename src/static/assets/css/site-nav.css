@@ -1,4 +1,4 @@
-/* Site header: utility bar, main nav, Services and Brands menus, phone sheet.
+/* Site header: utility bar, main nav with the Services menu and a Brands link, phone sheet.
    Highlights Chicago Design System v3 (Paper, "09 · Navigation" and the brand service page header).
    Every value is a design-system token; nothing here depends on the page's own stylesheet. */
 .sn{--sn-canvas:#FFFFFF;--sn-line:#E4E4E4;--sn-line-strong:#8F8F8F;--sn-ink:#181515;--sn-ink-soft:#454545;--sn-ink-muted:#6B6B6B;--sn-navy:#15202A;--sn-navy-line:#FFFFFF1A;--sn-on-navy-soft:#FFFFFFCC;--sn-on-navy-muted:#FFFFFF99;--sn-blue:#223D90;--sn-blue-deep:#182C69;--sn-green:#66B143;--sn-display:"Space Grotesk","Space Grotesk Fallback",system-ui,sans-serif;--sn-body:Inter,"Inter Fallback",system-ui,sans-serif;position:relative;z-index:40;font-family:var(--sn-body);-webkit-font-smoothing:antialiased}
@@ -55,10 +55,6 @@
 a.sn-link:hover,a.sn-link:focus-visible{color:var(--sn-green)}
 a.sn-link:hover::before,a.sn-link:focus-visible::before{opacity:1;transform:none}
 a.sn-link:hover>span,a.sn-link:focus-visible>span{transform:translateX(26px)}
-.sn-link--planned{color:var(--sn-on-navy-muted)}
-.sn-link--planned::before{display:none}
-.sn-link--planned i{flex-shrink:0;width:7px;height:7px;margin-left:8px;border:1.5px dashed currentColor;border-radius:50%}
-.sn[data-show-planned="0"] li[data-live="0"]{display:none}
 .sn-more{appearance:none;min-height:28px;margin-top:2px;padding:0;border:0;background:none;font:500 14px/20px var(--sn-body);color:var(--sn-green);text-decoration:underline 1px var(--sn-green);text-underline-offset:3px;cursor:pointer;transition:color .3s ease}
 .sn-more:hover{color:#fff}
 .sn-foot{position:sticky;bottom:0;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px 16px;padding:12px 30px;background:var(--sn-navy);border-top:1px solid var(--sn-navy-line);font-size:16px;line-height:24px}
@@ -72,7 +68,7 @@ a.sn-link:hover>span,a.sn-link:focus-visible>span{transform:translateX(26px)}
 .sn-sheet-rows{margin:0;padding:0;list-style:none}
 .sn-sheet-rows>li{border-bottom:1px solid var(--sn-line)}
 .sn-sheet-row{appearance:none;display:flex;align-items:center;justify-content:space-between;width:100%;min-height:56px;padding:0;border:0;background:none;font:500 15px/20px var(--sn-body);letter-spacing:.04em;text-transform:uppercase;text-align:left;color:var(--sn-ink);text-decoration:none;cursor:pointer}
-.sn-sheet-row[aria-expanded=true]{color:var(--sn-blue)}
+.sn-sheet-row[aria-expanded=true],.sn-sheet-row.is-current{color:var(--sn-blue)}
 .sn-pm{position:relative;width:24px;height:24px;flex-shrink:0}
 .sn-pm::before,.sn-pm::after{content:"";position:absolute;left:5px;top:11px;width:14px;height:2px;background:currentColor}
 .sn-pm::after{transform:rotate(90deg)}
@@ -83,7 +79,6 @@ a.sn-link:hover>span,a.sn-link:focus-visible>span{transform:translateX(26px)}
 .sn-sheet .sn-items{padding:0 0 8px 10px}
 .sn-sheet .sn-link{min-height:44px;font-size:16px;line-height:24px;color:var(--sn-ink)}
 .sn-sheet .sn-link::before{display:none}
-.sn-sheet .sn-link--planned{color:var(--sn-ink-muted)}
 .sn-sheet-all{display:flex;align-items:center;min-height:44px;font-weight:500;color:var(--sn-blue);text-decoration:underline 1px var(--sn-green);text-underline-offset:3px}
 .sn-sheet-actions{display:grid;gap:10px;padding-block:20px}
 .sn-btn{display:flex;align-items:center;justify-content:center;gap:8px;height:52px;border-radius:999px;font:600 16px/24px var(--sn-display);letter-spacing:.02em;text-transform:uppercase;text-decoration:none}

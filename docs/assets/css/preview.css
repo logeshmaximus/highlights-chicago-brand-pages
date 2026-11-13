@@ -97,7 +97,3 @@
 /* Compact or photo marks (aspect under 2.6) get a taller logo chip in the cluster hero */
 .pv-logo-chip--tall{height:84px;padding:8px 14px}
 .pv-logo-chip--tall img{max-height:66px;max-width:170px}
-.pv-toggle{display:inline-flex;align-items:center;gap:7px;cursor:pointer}
-.pv-toggle input{width:15px;height:15px;margin:0;accent-color:#66b143}
-.pv-counts{opacity:.85}
-@media(max-width:1023px){.pv-counts{display:none}}

@@ -1,10 +1,10 @@
-// Site header: navy utility bar, white main nav with the Services and Brands menus, and the phone sheet.
+// Site header: navy utility bar, white main nav with the Services menu and a Brands link, and the phone sheet.
 // One component for every page, built to the Design System v3 navigation spec (Paper, "09 · Navigation"):
 // links Inter 15/500 uppercase +0.04em, phone in Space Grotesk 600, a blue pill CTA, navy menu panels
 // with radius 4 and no shadow, a green bar sliding in on hover, and a white sheet with 56px rows on phones.
 // Styles: src/static/assets/css/site-nav.css. Behaviour: src/static/assets/js/site-nav.js.
 import { SITE } from '../content/site.mjs';
-import { SERVICES_MENU, brandsMenu } from '../content/nav.mjs';
+import { SERVICES_MENU } from '../content/nav.mjs';
 
 const LIVE = SITE.live;
 const esc = (s = '') => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -21,10 +21,8 @@ const SVG = {
 };
 const svg = (name, size = 16) => `<svg class="sn-icon" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${SVG[name]}</svg>`;
 
-// A live page is a link; a planned page is plain text with a dashed ring, so nobody clicks through to a 404.
-const item = ([label, href, live]) => live
-  ? `<li data-live="1"><a class="sn-link" href="${esc(href)}"><span>${esc(label)}</span></a></li>`
-  : `<li data-live="0"><span class="sn-link sn-link--planned" title="Planned page, not published yet"><span>${esc(label)}</span><i aria-hidden="true"></i></span></li>`;
+// The menu holds live pages only (src/content/nav.mjs), so every item is a link.
+const item = ([label, href]) => `<li><a class="sn-link" href="${esc(href)}"><span>${esc(label)}</span></a></li>`;
 
 const column = (c) => `<div class="sn-col"><p class="sn-col-head">${esc(c.name)}</p><ul class="sn-items">${c.items.map(item).join('')}</ul><button type="button" class="sn-more" hidden></button></div>`;
 
@@ -43,7 +41,7 @@ ${panel(menu)}
 </li>`;
 }
 
-// Phone and tablet: each menu expands in place, then its groups expand in place.
+// Phone and tablet: the Services row expands in place, then each group expands in place.
 function sheetMenu(menu) {
   return `<li><button type="button" class="sn-sheet-row" aria-expanded="false" aria-controls="sn-sheet-${menu.key}">${menu.label}<span class="sn-pm" aria-hidden="true"></span></button>
 <div class="sn-sheet-sub" id="sn-sheet-${menu.key}" hidden>
@@ -59,19 +57,24 @@ ${menu.columns.map((c, i) => `<button type="button" class="sn-sheet-cat" aria-ex
  * @param {'services'|'brands'|null} o.current the section the page belongs to
  */
 export function siteHeader({ logoSrc, brandsHref, current = null }) {
-  const brands = brandsMenu(brandsHref);
+  // Brands has no menu: Brands -> the brands page -> a brand's page -> its brand service page.
   const plain = [
     ['Home', `${LIVE}/`],
     ['About Us', `${LIVE}/about-us`],
     SERVICES_MENU,
-    brands,
+    ['Brands', brandsHref, 'brands'],
     ['Service Areas', `${LIVE}/service-areas`],
     ['Blog', `${LIVE}/blog`],
     ['Learning Center', `${LIVE}/learning-center`],
   ];
-  const desktop = plain.map((l) => Array.isArray(l) ? `<li><a class="sn-top" href="${esc(l[1])}">${l[0]}</a></li>` : menuItem(l, current)).join('\n');
-  const sheet = plain.map((l) => Array.isArray(l) ? `<li><a class="sn-sheet-row" href="${esc(l[1])}">${l[0]}</a></li>` : sheetMenu(l)).join('\n');
-  return `<div class="sn" data-show-planned="1">
+  const isCur = (l) => Boolean(l[2]) && l[2] === current;
+  const desktop = plain.map((l) => Array.isArray(l)
+    ? `<li><a class="sn-top${isCur(l) ? ' is-current' : ''}" href="${esc(l[1])}"${isCur(l) ? ' aria-current="page"' : ''}>${l[0]}</a></li>`
+    : menuItem(l, current)).join('\n');
+  const sheet = plain.map((l) => Array.isArray(l)
+    ? `<li><a class="sn-sheet-row${isCur(l) ? ' is-current' : ''}" href="${esc(l[1])}"${isCur(l) ? ' aria-current="page"' : ''}>${l[0]}</a></li>`
+    : sheetMenu(l)).join('\n');
+  return `<div class="sn">
 <div class="sn-utility" aria-label="Business contact information"><div class="sn-wrap sn-utility-inner">
 <div class="sn-utility-group"><a href="${esc(SITE.mapsPlace)}">${svg('pin')}${SITE.address}, United States</a><span class="sn-sep" aria-hidden="true"></span><span>${svg('clock')}${HOURS}</span></div>
 <div class="sn-utility-group"><a href="mailto:${SITE.email}">${svg('mail')}${SITE.email}</a><span class="sn-sep" aria-hidden="true"></span><a class="sn-utility-phone" href="tel:${SITE.tel}">${svg('phone')}${SITE.phoneShort}</a></div>
@@ -91,13 +94,4 @@ ${sheet}
 <div class="sn-sheet-actions"><a class="sn-btn sn-btn--primary" href="${LIVE}/contact-us">Contact us</a><a class="sn-btn sn-btn--secondary" href="tel:${SITE.tel}">${svg('phone', 18)}Call ${SITE.phone}</a><p class="sn-sheet-addr">${SITE.address}</p></div>
 </div></div>
 </div>`;
-}
-
-// Counts for the preview bar.
-export function menuCounts(brandsHref) {
-  const count = (m) => {
-    const all = m.columns.flatMap((c) => c.items);
-    return { live: all.filter((i) => i[2]).length, planned: all.filter((i) => !i[2]).length };
-  };
-  return { services: count(SERVICES_MENU), brands: count(brandsMenu(brandsHref)) };
 }

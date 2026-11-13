@@ -1,8 +1,6 @@
-// Menu data for the site header: the Services menu and the Brands menu.
-// Each item is [label, href or null, live]. Planned items have no URL yet, so they render as plain text,
-// and the live site hides them (showPlanned = false).
-import { BRANDS, BRANDS_PATH } from './brands.mjs';
-
+// Menu data for the site header: the Services menu. Brands is a plain link to the brands page.
+// Each service is [label, path under /services, live]. The menu shows live pages only: a planned page
+// stays in this list with 0 and appears in the menu once it is published and set to 1 with its URL.
 const LIVE_SITE = 'https://www.highlightschicago.com';
 const svc = (path) => `${LIVE_SITE}/services/${path}`;
 
@@ -75,46 +73,13 @@ const SERVICES = [
   ] },
 ];
 
-// Live pages first in every column; search-volume order is kept inside live and planned.
-const liveFirst = (items) => [...items].sort((a, b) => Number(b[2]) - Number(a[2]));
-
+// Only live pages reach the menu, in search-volume order.
 export const SERVICES_MENU = {
   key: 'services',
   label: 'Services',
   href: `${LIVE_SITE}/services`,
   allLabel: 'View all services',
-  columns: SERVICES.map((c) => ({ name: c.name, items: liveFirst(c.items.map(([n, p, live]) => [n, live ? svc(p) : null, Boolean(live)])) })),
+  columns: SERVICES
+    .map((c) => ({ name: c.name, items: c.items.filter(([, , live]) => live).map(([n, p]) => [n, svc(p)]) }))
+    .filter((c) => c.items.length),
 };
-
-// Brands: the four kinds of equipment that have written brand pages. Each item is one brand service page,
-// written pages first, then by search volume (the sheet row).
-const BRAND_COLUMNS = [
-  { name: 'Generators', cats: ['generator'] },
-  { name: 'EV Chargers', cats: ['ev'] },
-  { name: 'Doorbells & Cameras', cats: ['doorbell'] },
-  { name: 'Solar & Batteries', cats: ['battery', 'solar'] },
-];
-const PRODUCT = { battery: 'home battery', solar: 'solar panels' };
-
-export function brandsMenu(hubHref) {
-  return {
-    key: 'brands',
-    label: 'Brands',
-    href: hubHref,
-    allLabel: 'View all brands',
-    columns: BRAND_COLUMNS.map((col) => {
-      const items = [];
-      for (const b of BRANDS) {
-        for (const s of b.services) {
-          if (!col.cats.includes(s.cat)) continue;
-          const product = /Home Backup/.test(s.title) ? 'home backup' : PRODUCT[s.cat];
-          items.push({ row: s.row, item: [product ? `${b.name} ${product}` : b.name, s.href, s.live] });
-        }
-      }
-      items.sort((x, y) => Number(y.item[2]) - Number(x.item[2]) || x.row - y.row);
-      return { name: col.name, items: items.map((x) => x.item) };
-    }),
-  };
-}
-
-export const NAV_PATHS = { brands: BRANDS_PATH };

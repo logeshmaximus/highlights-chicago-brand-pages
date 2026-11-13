@@ -1,7 +1,8 @@
 // The standalone nav preview (repo logeshmaximus/highlights-chicago-services-dropdown): the same site header
 // as the brand pages, on the /services hero. One self-contained index.html: the header CSS and JS are inlined.
 import fs from 'fs';
-import { siteHeader, menuCounts } from '../lib/site-nav.mjs';
+import { siteHeader } from '../lib/site-nav.mjs';
+import { SERVICES_MENU } from '../content/nav.mjs';
 
 const BRAND_PREVIEW = 'https://logeshmaximus.github.io/highlights-chicago-brand-pages/';
 const LOGO = 'https://cdn.prod.website-files.com/69f58d69563c4c5bf9b01c60/6a3c3c20491b43b0858c1876_highlights-chicago-logo.webp';
@@ -10,7 +11,7 @@ export function dropdownPage() {
   const css = fs.readFileSync(new URL('../static/assets/css/site-nav.css', import.meta.url), 'utf8');
   const js = fs.readFileSync(new URL('../static/assets/js/site-nav.js', import.meta.url), 'utf8');
   const brandsHref = `${BRAND_PREVIEW}brands/`;
-  const n = menuCounts(brandsHref);
+  const live = SERVICES_MENU.columns.reduce((n, c) => n + c.items.length, 0);
   return `<!doctype html>
 <html lang="en">
 <head>
@@ -48,9 +49,7 @@ ${css}
 </head>
 <body>
 <div class="review"><div class="review-inner">
-<span>Services menu: <strong>${n.services.live}</strong> live · <strong>${n.services.planned}</strong> planned. Brands menu: <strong>${n.brands.live}</strong> written · <strong>${n.brands.planned}</strong> planned.</span>
-<label><input type="checkbox" checked onchange="window.snSetPlanned&&window.snSetPlanned(this.checked)"> Show planned pages</label>
-<span>Turn this off to see what visitors get. Same header as the <a href="${BRAND_PREVIEW}brands/">brand pages preview</a>.</span>
+<span>Services menu: <strong>${live}</strong> live pages, exactly what visitors get. Brands opens the <a href="${BRAND_PREVIEW}brands/">brands page</a>. Same header as the brand pages preview.</span>
 </div></div>
 ${siteHeader({ logoSrc: LOGO, brandsHref, current: 'services' })}
 <section class="hero">

@@ -2,7 +2,7 @@
 // Class names follow the Highlights Chicago Design System v3 build so the copied CSS applies unchanged.
 import { PATHS, RAW } from './icon-paths.mjs';
 import { SITE } from '../content/site.mjs';
-import { siteHeader, menuCounts } from './site-nav.mjs';
+import { siteHeader } from './site-nav.mjs';
 
 export const esc = (s = '') => String(s)
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -67,11 +67,7 @@ ${extraHead}</head>`;
 
 
 export function previewBar(base) {
-  const n = menuCounts(base + 'brands/index.html');
-  return `<div class="pv-bar" role="note"><div class="pv-bar-inner"><b>Design preview</b><span>Not the live site. Forms do not submit, and every page is noindex. Brand service page links open once the brand page PR is live.</span>
-<label class="pv-toggle"><input type="checkbox" checked onchange="window.snSetPlanned&&window.snSetPlanned(this.checked)"> Show planned pages in the menus</label>
-<span class="pv-counts">Services menu: ${n.services.live} live · ${n.services.planned} planned. Brands menu: ${n.brands.live} written · ${n.brands.planned} planned.</span>
-<a href="${base}index.html">All preview pages</a></div></div>`;
+  return `<div class="pv-bar" role="note"><div class="pv-bar-inner"><b>Design preview</b><span>Not the live site. Forms do not submit, and every page is noindex. Brand service page links open once the brand page PR is live.</span><a href="${base}index.html">All preview pages</a></div></div>`;
 }
 
 // Service-page chrome: the shared site header (src/lib/site-nav.mjs).

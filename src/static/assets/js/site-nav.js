@@ -1,4 +1,4 @@
-// Site header behaviour: Services and Brands menus, "View more" per column, planned-page toggle, phone sheet.
+// Site header behaviour: the Services menu, "View more" per column, and the phone sheet.
 (() => {
   const root = document.querySelector('.sn');
   if (!root) return;
@@ -8,20 +8,16 @@
   const hover = matchMedia('(hover: hover)').matches;
   let hoverT = null;
 
-  const showPlanned = () => root.dataset.showPlanned !== '0';
-
-  // Desktop columns: hide planned pages when the toggle is off, then cap what is left.
+  // Desktop columns: show the first CAP pages; "View N more" opens the rest in place.
   function layoutColumn(col) {
     const items = [...col.querySelectorAll('.sn-items > li')];
-    const visible = items.filter((li) => showPlanned() || li.dataset.live === '1');
     const open = col.dataset.open === '1';
-    items.forEach((li) => { li.hidden = !visible.includes(li) || (!open && visible.indexOf(li) >= CAP); });
-    const extra = visible.length - CAP;
+    items.forEach((li, i) => { li.hidden = !open && i >= CAP; });
+    const extra = items.length - CAP;
     const more = col.querySelector('.sn-more');
     more.hidden = extra <= 0;
     more.textContent = open ? 'Show less' : `View ${extra} more`;
     more.setAttribute('aria-expanded', String(open));
-    col.hidden = visible.length === 0;
   }
   const layoutAll = () => root.querySelectorAll('.sn-col').forEach(layoutColumn);
 
@@ -73,7 +69,7 @@
   });
   addEventListener('resize', () => menus.forEach((m) => isOpen(m) && place(m)));
 
-  // Phone sheet: the menu button, then each menu and each group expand in place.
+  // Phone sheet: the menu button, then the Services row and each group expand in place.
   const burger = root.querySelector('.sn-burger');
   const sheet = root.querySelector('.sn-sheet');
   burger.addEventListener('click', () => {
@@ -89,7 +85,5 @@
     document.getElementById(toggle.getAttribute('aria-controls')).hidden = open;
   });
 
-  // The preview bar's "Show planned pages" switch. The live site starts with planned pages hidden.
-  window.snSetPlanned = (on) => { root.dataset.showPlanned = on ? '1' : '0'; layoutAll(); };
   layoutAll();
 })();

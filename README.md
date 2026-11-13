@@ -21,10 +21,9 @@ Every page is `noindex`, `robots.txt` disallows crawling, and canonical URLs poi
 
 Every page uses one header, `src/lib/site-nav.mjs` with `assets/css/site-nav.css` and `assets/js/site-nav.js`, built to the Design System v3 navigation spec (Paper file "Highlights Chicago Design System", page "Design System v3 · clean", artboard "09 · Navigation"):
 
-- Nav: Home, About Us, Services, Brands, Service Areas, Blog, Learning Center, then the Contact us pill. Seven links fill the 1200 frame, so on desktop the phone number sits in the utility bar; below 1100px the white menu sheet takes over, with a round call button.
-- Services menu (`src/content/nav.mjs`): four columns, live pages first. 12 pages that went live after 5 Nov now link to their nested URLs.
-- Brands menu: Generators, EV Chargers, Doorbells & Cameras, Solar & Batteries. The 10 written brand pages come first and link to `/services/brands/<brand>/<page>`.
-- Planned pages are plain grey text with a dashed ring. The preview bar switch hides them, as the live site will.
+- Nav: Home, About Us, Services (menu), Brands (a plain link to the brands page), Service Areas, Blog, Learning Center, then the Contact us pill. Seven links fill the 1200 frame, so on desktop the phone number sits in the utility bar; below 1100px the white menu sheet takes over, with a round call button.
+- Services menu (`src/content/nav.mjs`): four columns of live pages only, exactly what visitors get. A planned page stays in the list with `0` and appears once it is published and set to `1` with its URL. 12 pages that went live after 5 Nov now link to their nested URLs.
+- Brands has no menu: Brands → the brands page → a brand's page → its brand service page (`/services/brands/<brand>/<page>`).
 
 `node src/build.mjs` also writes `../highlights-nav-dropdown/index.html` (the nav preview at https://logeshmaximus.github.io/highlights-chicago-services-dropdown/) when that checkout sits beside this one, so the two previews always show the same header.
 
