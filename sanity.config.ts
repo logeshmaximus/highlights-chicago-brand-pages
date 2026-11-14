@@ -8,6 +8,7 @@ import {defineConfig} from 'sanity'
 import {defineDocuments, defineLocations, presentationTool} from 'sanity/presentation'
 import {structureTool} from 'sanity/structure'
 import {schemaTypes} from './sanity/schemaTypes'
+import {structure} from './sanity/structure'
 
 const projectId = process.env.NEXT_SANITY_PROJECT_ID || 'x6yq02oi'
 const dataset = process.env.NEXT_SANITY_DATASET || 'production'
@@ -22,12 +23,12 @@ export default defineConfig({
   dataset,
   basePath: '/brands/studio',
   plugins: [
-    structureTool(),
+    structureTool({structure}),
     presentationTool({
       previewUrl: {initial: '/brands', previewMode: {enable: '/brands/api/draft-mode/enable', disable: '/brands/api/draft-mode/disable'}},
       resolve: {
         mainDocuments: defineDocuments([
-          {route: '/brands/:brand/:slug', filter: `_type == "brandServiceLandingPageTemplate" && slug.current == $slug`},
+          {route: '/brands/:brand/:slug', filter: `_type == "brandServiceLandingPageTemplate" && slug.current == $slug && !(_id in ["brand-service-landing-page-template", "drafts.brand-service-landing-page-template"])`},
         ]),
         locations: {
           brandServiceLandingPageTemplate: defineLocations({

@@ -10,7 +10,7 @@ const section = (name: string, title: string, type: string, group: string) => de
 
 export const brandServiceLandingPageTemplate = defineType({
   name: 'brandServiceLandingPageTemplate',
-  title: 'Brand service landing page template',
+  title: 'Brand service page',
   type: 'document',
   groups: [
     {name: 'page', title: 'Page and SEO', default: true},
