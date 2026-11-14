@@ -1,7 +1,7 @@
 /* Site header. Utility bar: the live highlightschicago.com bar. Navbar: Paper file "Charming umbrella",
    Page 1 (desktop default / Services open / Resources open; phone closed / menu open / services expanded).
    Frame 1180, 84px tall; links Inter 14/18 500 uppercase +0.04em, 30px apart; current = brand blue with a
-   2px green underline; Contact Us pill 48px, Space Grotesk 600 15. Panels: navy, 12px bottom radius. */
+   2px green underline under an open dropdown (not the current page); Contact Us pill 48px, Space Grotesk 600 15. Panels: navy, 12px bottom radius. */
 .sn{--sn-white:#FFFFFF;--sn-ink:#12202B;--sn-ink-2:#3D5566;--sn-line:#DDE5EC;--sn-bg-2:#F6F9FB;--sn-brand:#223D90;--sn-brand-dk:#182C69;--sn-accent:#66B143;--sn-panel:#15202A;--sn-panel-text:#E6ECF1;--sn-panel-muted:#9AABB8;--sn-panel-line:#FFFFFF1F;--sn-navy:#15202A;--sn-on-navy-soft:#FFFFFFCC;--sn-navy-line:#FFFFFF1A;--sn-display:"Space Grotesk","Space Grotesk Fallback",system-ui,sans-serif;--sn-body:Inter,"Inter Fallback",system-ui,sans-serif;position:relative;z-index:40;font-family:var(--sn-body);-webkit-font-smoothing:antialiased}
 .sn *,.sn *::before,.sn *::after{box-sizing:border-box}
 .sn [hidden]{display:none!important}
@@ -31,7 +31,8 @@
 .sn-top::after{content:"";position:absolute;left:0;right:0;bottom:22px;height:2px;border-radius:2px;background:var(--sn-accent);transform:scaleX(0);transition:transform .2s ease}
 .sn-top:hover{color:var(--sn-brand)}
 .sn-top.is-current,.sn-has-menu.is-open>.sn-top{color:var(--sn-brand)}
-.sn-top.is-current::after,.sn-has-menu.is-open>.sn-top::after{transform:none}
+/* The green underline marks an open dropdown only; the current page is shown in blue without it. */
+.sn-has-menu.is-open>.sn-top::after{transform:none}
 .sn-has-menu.is-open>.sn-top .sn-icon{transform:rotate(180deg);color:var(--sn-brand)}
 .sn-cta{display:inline-flex;align-items:center;flex-shrink:0;height:48px;padding-inline:26px;border-radius:999px;background:var(--sn-brand);font:600 15px/18px var(--sn-display);letter-spacing:.02em;text-transform:uppercase;color:var(--sn-white);text-decoration:none;white-space:nowrap;transition:background .2s ease}
 .sn-cta:hover{background:var(--sn-brand-dk)}
