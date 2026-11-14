@@ -120,10 +120,18 @@ export function BookingToggle({label, phone, callLabel}: {label: string; phone: 
   const [shown, setShown] = useState(false)
   const [open, setOpen] = useState(false)
   useEffect(() => {
+    // Shown once the hero has scrolled away, and hidden again while the footer is on screen,
+    // so it never sits on top of the footer's social links.
     const hero = document.querySelector('.bp-hero')
+    const footer = document.querySelector('footer')
     if (!hero) return
-    const io = new IntersectionObserver(([e]) => setShown(!e.isIntersecting), {threshold: 0})
+    const seen = new Map<Element, boolean>()
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => seen.set(e.target, e.isIntersecting))
+      setShown(!seen.get(hero) && !(footer && seen.get(footer)))
+    }, {threshold: 0})
     io.observe(hero)
+    if (footer) io.observe(footer)
     return () => io.disconnect()
   }, [])
   const tel = `tel:+1${phone.replace(/\D/g, '').slice(-10)}`

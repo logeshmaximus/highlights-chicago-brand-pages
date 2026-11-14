@@ -34,7 +34,7 @@
 .bp-row--4{grid-template-columns:repeat(4,minmax(0,1fr))}
 .bp-card{background:#fff;border:1px solid var(--line);border-radius:10px}
 .bp-note{margin-top:24px!important;font-size:14px;line-height:22px;color:var(--ink-muted)}
-.bp-info-line{display:flex;gap:12px;align-items:flex-start;margin-top:28px!important;padding-top:24px;border-top:1px solid var(--line);color:var(--ink-soft);font-size:15px}
+.bp-info-line,.bp-note-box{display:flex;gap:18px;align-items:center;margin-top:28px!important;padding:20px 28px 20px 24px;border:1px solid var(--line);border-left:4px solid var(--blue);border-radius:10px;background:#fff;color:var(--ink);font-size:16px;line-height:26px}
 .bp-icon-badge{display:inline-grid;place-items:center;width:44px;height:44px;border-radius:999px;background:var(--blue-tint);color:var(--blue);flex-shrink:0}
 .bp-icon-badge--navy{background:#FFFFFF14;color:var(--green)}
 .bp-icon-badge--green{background:var(--green-tint);color:var(--green-ink)}
@@ -137,7 +137,7 @@
 .bp-model{padding:24px;display:flex;flex-direction:column;gap:10px}
 .bp-model-media{height:150px;display:grid;place-items:center;margin-bottom:12px}
 .bp-model-logo{max-width:55%;max-height:40px;object-fit:contain;opacity:.9}
-.bp-model-media img{max-height:180px;object-fit:contain}
+.bp-model-media img{max-height:150px;width:auto;object-fit:contain}
 .bp-model p{color:var(--ink-soft);font-size:15px;line-height:24px}
 .bp-model .bp-tags{padding-top:4px;align-self:start}
 
@@ -230,8 +230,8 @@
 .bp-route-num{display:grid;place-items:center;width:40px;height:40px;border-radius:999px;font:600 16px/1 var(--display);color:#fff;background:var(--green-ink);margin-bottom:8px}
 .bp-route--blue .bp-route-num{background:var(--blue)}
 .bp-route--navy .bp-route-num{background:#fff;color:var(--navy)}
-.bp-note-box{display:flex;gap:14px;align-items:flex-start;margin-top:32px!important;padding:22px 28px;border-radius:10px;background:var(--alt);font-size:15px;line-height:24px;color:var(--ink-soft)}
-.bp-note-box a{color:var(--blue);font-weight:600}
+.bp-note-box{margin-top:32px!important}
+.bp .bp-note-box a{color:var(--blue);font-weight:600}
 
 /* Installations */
 .bp-slide{position:relative;margin:0;border-radius:10px;overflow:hidden}
@@ -547,3 +547,4 @@
 .bp-lib-tab.is-active .bp-lib-tab-go{opacity:1}
 /* Phones: map pins become dots without names so they do not pile up */
 @media (max-width:640px){.bp-map-pin>span,.bp-map-shop-name,.bp-map-lake{display:none}.bp-map-shop{transform:scale(.55);transform-origin:80px 47px}.bp-map-pin svg{width:16px;height:20px}.bp-map-off{height:24px;font-size:11px}}
+@media (max-width:640px){.bp-info-line,.bp-note-box{align-items:flex-start;padding:18px 18px 18px 16px;font-size:15px;line-height:24px}}

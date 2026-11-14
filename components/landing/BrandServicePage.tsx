@@ -29,6 +29,21 @@ function logoFor(name?: string): string | null {
   return key ? `/brands/images/logos/${map[key].file}` : null
 }
 
+/** Product photos kept in public/images/products/<brand>/, used on a model card while Sanity has no photo.
+    The pattern is matched against the card's series and name. */
+const MODEL_PHOTOS: Record<string, [RegExp, string][]> = {
+  nest: [
+    [/wired.*3rd/i, 'nest-doorbell-wired-3rd-gen.webp'],
+    [/floodlight/i, 'nest-cam-with-floodlight.webp'],
+    [/any nest|already have|hello/i, 'nest-hello-doorbell.webp'],
+  ],
+}
+function modelPhoto(brand: string | undefined, c: Doc): string | null {
+  const key = slugify(brand || '')
+  const hit = (MODEL_PHOTOS[key] || []).find(([re]) => re.test(`${c.series || ''} ${c.name || ''}`))
+  return hit ? `/brands/images/products/${key}/${hit[1]}` : null
+}
+
 /** Real Highlights Chicago photos used when a page has no hero or estimate photo in Sanity yet. */
 function stockPhoto(doc: Doc, kind: 'hero' | 'estimate'): string {
   const t = `${doc.title || ''} ${doc.service || ''}`.toLowerCase()
@@ -254,7 +269,13 @@ function Models({doc}: {doc: Doc}) {
         {m.models.map((c: Doc, i: number) => (
           <article key={i} className="bp-card bp-model" style={{gridRow: 'span 5'}}>
             <div className="bp-model-media">
-              {hasAsset(c.image) ? <Img image={c.image} width={600} /> : logo && <img className="bp-model-logo" src={logo} alt={`${doc.brand} logo`} loading="lazy" />}
+              {hasAsset(c.image) ? (
+                <Img image={c.image} width={600} />
+              ) : modelPhoto(doc.brand, c) ? (
+                <img src={modelPhoto(doc.brand, c)!} alt={c.image?.alt || `${c.series || c.name}`} loading="lazy" />
+              ) : (
+                logo && <img className="bp-model-logo" src={logo} alt={`${doc.brand} logo`} loading="lazy" />
+              )}
             </div>
             <p className="bp-label bp-label--green">{c.series}</p>
             <h3 className="bp-h5">{c.name}</h3>
@@ -381,7 +402,7 @@ function Scope({doc}: {doc: Doc}) {
           ))}
         </div>
       )}
-      {s.note && <p className="bp-info-line"><Icon name="info" size={18} />{s.note}</p>}
+      {s.note && <p className="bp-info-line"><span className="bp-icon-badge"><Icon name="list-checks" size={20} /></span><span>{s.note}</span></p>}
     </Section>
   )
 }
@@ -426,7 +447,7 @@ function EstimateChecks({doc}: {doc: Doc}) {
         )}
         {(e.noteLine1 || e.noteLine2) && (
           <p className="bp-note-box">
-            <Icon name="info" size={18} />
+            <span className="bp-icon-badge"><Icon name="clipboard" size={20} /></span>
             <span>
               {e.noteLine1}
               {e.noteLine2 && <><br />{e.noteLine2.split(/(cost table)/).map((part: string, i: number) => part === 'cost table' ? <a key={i} href="#pricing">cost table</a> : part)}</>}
