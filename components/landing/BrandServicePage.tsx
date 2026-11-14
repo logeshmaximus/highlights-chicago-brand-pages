@@ -863,8 +863,12 @@ function OtherBrands({doc, brandLinks}: {doc: Doc; brandLinks: BrandLink[]}) {
 }
 
 function Library({doc}: {doc: Doc}) {
-  const l = doc.library
-  if (!has(l?.guides)) return null
+  const lib = doc.library
+  // A guide with only a tab label (no heading, intro or sections) is not written yet: its tab is left out,
+  // so nobody opens an empty panel. It appears on its own once the guide is written in Sanity.
+  const guides = (lib?.guides || []).filter((g: Doc) => g.title || g.intro || has(g.sections))
+  if (!guides.length) return null
+  const l = {...lib, guides}
   const word = l.guideWord || 'Guide'
   const n = l.guides.length
   const tabs = l.guides.map((g: Doc, i: number) => (
