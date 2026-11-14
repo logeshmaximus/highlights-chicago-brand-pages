@@ -885,7 +885,16 @@ function Library({doc}: {doc: Doc}) {
 
 /* ---------- page ---------- */
 
-export function BrandServicePage({doc, brandHref, brandLinks}: {doc: Doc; brandHref: string; brandLinks: BrandLink[]}) {
+// Removes editor notes ("[CONFIRM: ...]") from every text field before anything is shown.
+function scrub(v: any): any {
+  if (typeof v === 'string') return /\[(CONFIRM|TODO|NOTE)/i.test(v) ? clean(v) : v
+  if (Array.isArray(v)) return v.map(scrub)
+  if (v && typeof v === 'object') return Object.fromEntries(Object.entries(v).map(([k, x]) => [k, scrub(x)]))
+  return v
+}
+
+export function BrandServicePage({doc: raw, brandHref, brandLinks}: {doc: Doc; brandHref: string; brandLinks: BrandLink[]}) {
+  const doc = scrub(raw)
   const booking = doc.bookingToggle
   return (
     <div className="bp">
