@@ -37,6 +37,12 @@ export const brandServiceLandingPageTemplate = defineType({
       fields: [
         defineField({name: 'metaTitle', title: 'Meta title', type: 'string', validation: (rule) => rule.max(60).warning()}),
         defineField({name: 'metaDescription', title: 'Meta description', type: 'text', rows: 3, validation: (rule) => rule.max(160).warning()}),
+        defineField({
+          name: 'canonicalUrl',
+          title: 'Canonical URL',
+          type: 'url',
+          description: 'The page’s own live address, for example https://www.highlightschicago.com/brands/kohler/kohler-generator-installation-repair (brand, then the URL slug). Leave empty and the site uses that address automatically.',
+        }),
       ],
     }),
 
