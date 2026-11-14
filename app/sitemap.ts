@@ -9,7 +9,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const brands = buildBrands(pages)
   return [
     {url: `${siteUrl}/brands`},
-    ...brands.map((b: {slug: string}) => ({url: `${siteUrl}/brands/${b.slug}`})),
+    ...brands.filter((b: {liveCount: number}) => b.liveCount > 0).map((b: {slug: string}) => ({url: `${siteUrl}/brands/${b.slug}`})),
     ...pages.map((p) => ({url: `${siteUrl}/brands/${slugify(p.brand)}/${p.slug}`, lastModified: p._updatedAt})),
   ]
 }

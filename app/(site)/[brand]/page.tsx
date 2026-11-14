@@ -1,17 +1,18 @@
 import type {Metadata} from 'next'
 import {notFound} from 'next/navigation'
-import {getBrands} from '@/lib/data'
+import {getBrands, getPublishedPageList} from '@/lib/data'
 import {buildBrands} from '@/lib/brands.mjs'
 import {brandBody, brandIntroText} from '@/lib/collections.mjs'
 
 type Props = {params: Promise<{brand: string}>}
 
-export function generateStaticParams() {
-  return buildBrands([]).map((b: {slug: string}) => ({brand: b.slug}))
+// Only brands with a published page have a page; the rest return 404 until their first page is published.
+export async function generateStaticParams() {
+  return buildBrands(await getPublishedPageList()).filter((b: {liveCount: number}) => b.liveCount > 0).map((b: {slug: string}) => ({brand: b.slug}))
 }
 
 async function findBrand(slug: string) {
-  return (await getBrands()).find((b: {slug: string}) => b.slug === slug)
+  return (await getBrands()).find((b: {slug: string; liveCount: number}) => b.slug === slug && b.liveCount > 0)
 }
 
 export async function generateMetadata({params}: Props): Promise<Metadata> {

@@ -7,6 +7,8 @@ import {siteHeader} from '@/lib/site-nav.mjs'
 import {hcFooter} from '@/lib/ui.mjs'
 
 const BASE = '/brands/'
+// Changes with every deploy, so browsers never keep an old copy of the stylesheets and scripts.
+const V = (process.env.VERCEL_GIT_COMMIT_SHA || String(Date.now())).slice(0, 8)
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -24,7 +26,7 @@ export default async function SiteLayout({children}: {children: React.ReactNode}
   return (
     <html lang="en">
       <head>
-        {CSS.map((f) => <link key={f} rel="stylesheet" href={`${BASE}assets/css/${f}`} />)}
+        {CSS.map((f) => <link key={f} rel="stylesheet" href={`${BASE}assets/css/${f}?v=${V}`} />)}
       </head>
       <body className="inter_c15e96cb-module__0bjUvq__variable">
         {preview && (
@@ -37,8 +39,8 @@ export default async function SiteLayout({children}: {children: React.ReactNode}
           <main id="main">{children}</main>
           <div dangerouslySetInnerHTML={{__html: hcFooter(BASE)}} />
         </div>
-        <Script src={`${BASE}assets/js/site-nav.js`} strategy="afterInteractive" />
-        <Script src={`${BASE}assets/js/site.js`} strategy="afterInteractive" />
+        <Script src={`${BASE}assets/js/site-nav.js?v=${V}`} strategy="afterInteractive" />
+        <Script src={`${BASE}assets/js/site.js?v=${V}`} strategy="afterInteractive" />
         {preview && <VisualEditing />}
       </body>
     </html>
