@@ -6,6 +6,8 @@ import type {ReactNode} from 'react'
 import {imageUrl, type SanityImage} from '@/sanity/image'
 import {BookingToggle, Carousel, LibraryTabs, ServiceTabs} from './client'
 import {SITE} from '@/lib/site.mjs'
+import {slugify} from '@/lib/brands.mjs'
+import LOGOS from '@/lib/logos.json'
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 type Doc = Record<string, any>
@@ -14,6 +16,30 @@ type BrandLink = {name: string; href: string}
 const TEL = `tel:${SITE.tel}`
 const pad = (n: number) => String(n).padStart(2, '0')
 const has = (v: unknown) => (Array.isArray(v) ? v.length > 0 : Boolean(v))
+const hasAsset = (img: any) => Boolean(img?.asset)
+// Editor notes such as "[CONFIRM: ...]" are for the team, never for the page.
+const clean = (t?: string) => (t || '').replace(/\s*\[(CONFIRM|TODO|NOTE)[^\]]*\]/gi, '').trim()
+
+/** The brand's logo from public/images/logos, used where Sanity has no logo or model photo yet. */
+function logoFor(name?: string): string | null {
+  if (!name) return null
+  const map = LOGOS as Record<string, {file: string}>
+  const slug = slugify(name)
+  const key = map[slug] ? slug : Object.keys(map).find((k) => slug.startsWith(`${k}-`) || slug === k)
+  return key ? `/brands/images/logos/${map[key].file}` : null
+}
+
+/** Real Highlights Chicago photos used when a page has no hero or estimate photo in Sanity yet. */
+function stockPhoto(doc: Doc, kind: 'hero' | 'estimate'): string {
+  const t = `${doc.title || ''} ${doc.service || ''}`.toLowerCase()
+  if (kind === 'estimate') return '/brands/images/v3/photos/tech-panel-testing.webp'
+  if (/generator/.test(t)) return '/brands/images/v3/photos/standby-generator.webp'
+  if (/battery|powerwall/.test(t)) return '/brands/images/v3/photos/solar-battery-install.webp'
+  if (/charger|ev\b/.test(t)) return '/brands/images/services/tesla-and-ev-charger-installation.jpg'
+  if (/doorbell|camera|cctv/.test(t)) return '/brands/images/services/cctv-installation.jpg'
+  if (/solar/.test(t)) return '/brands/images/v3/photos/gen-hero-rooftop-install.webp'
+  return '/brands/images/services/electrical-installation-services.jpg'
+}
 
 /* ---------- small pieces ---------- */
 
@@ -40,6 +66,15 @@ const PATHS: Record<string, string> = {
   route: 'M6 19a2 2 0 1 0 0-.01M18 5a2 2 0 1 0 0-.01M6 17V9a3 3 0 0 1 3-3h6M18 7v8a3 3 0 0 1-3 3H9',
   pad: 'M4 16h16M6 16V9h12v7M3 20h18',
   wrench: 'M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-.6-.6-2.4z',
+  user: 'M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8z M4 21a8 8 0 0 1 16 0',
+  shieldCheck: 'M12 3l7 3v5c0 4.5-3 8.5-7 10-4-1.5-7-5.5-7-10V6z M9 12l2 2 4-4',
+  fileCheck: 'M14 3H6v18h12V7z M14 3v4h4 M9 14l2 2 4-4',
+  award: 'M12 15a6 6 0 1 0 0-12 6 6 0 0 0 0 12z M8.5 14 7 22l5-3 5 3-1.5-8',
+  clock: 'M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20z M12 7v5l3 2',
+  home: 'M3 11l9-7 9 7v10H3z M9 21v-6h6v6',
+  file: 'M14 3H6v18h12V7z M14 3v4h4 M9 12h6M9 16h6',
+  bolt: 'M13 2 4 14h7l-1 8 9-12h-7z',
+  chevronRight: 'M9 6l6 6-6 6',
 }
 function Icon({name, size = 18}: {name: string; size?: number}) {
   const d = PATHS[name] || PATHS.check
@@ -110,10 +145,10 @@ function Hero({doc, brandHref}: {doc: Doc; brandHref: string}) {
   const f = h.form || {}
   const crumbs: string[] = doc.breadcrumb?.length ? doc.breadcrumb : ['Home', 'Brands', doc.brand, doc.title]
   const crumbHref = [SITE.live, '/brands', brandHref]
-  const bg = imageUrl(h.backgroundImage, 2000)
+  const bg = imageUrl(h.backgroundImage, 2000) || stockPhoto(doc, 'hero')
   return (
     <section className="bp-hero" aria-labelledby="bp-hero-title">
-      {bg && <img className="bp-hero-bg" src={bg} alt={h.backgroundImage?.alt || ''} fetchPriority="high" />}
+      <img className="bp-hero-bg" src={bg} alt={h.backgroundImage?.alt || ''} fetchPriority="high" />
       <div className="bp-wrap bp-hero-grid">
         <div className="bp-hero-copy">
           <nav className="bp-crumbs" aria-label="Breadcrumb">
@@ -211,16 +246,20 @@ function Services({doc}: {doc: Doc}) {
 function Models({doc}: {doc: Doc}) {
   const m = doc.models
   if (!has(m?.models)) return null
+  const logo = logoFor(doc.brand)
   return (
     <Section id="models" tone="alt" title={m.title}>
-      <div className="bp-row bp-row--4">
+      {/* Each card is five rows of one shared grid, so photos, names, text and tags line up across cards. */}
+      <div className="bp-row bp-row--4 bp-subgrid">
         {m.models.map((c: Doc, i: number) => (
-          <article key={i} className="bp-card bp-model">
-            <div className="bp-model-media"><Img image={c.image} width={600} /></div>
-            {c.series && <p className="bp-label bp-label--green">{c.series}</p>}
+          <article key={i} className="bp-card bp-model" style={{gridRow: 'span 5'}}>
+            <div className="bp-model-media">
+              {hasAsset(c.image) ? <Img image={c.image} width={600} /> : logo && <img className="bp-model-logo" src={logo} alt={`${doc.brand} logo`} loading="lazy" />}
+            </div>
+            <p className="bp-label bp-label--green">{c.series}</p>
             <h3 className="bp-h5">{c.name}</h3>
-            {c.text && <p>{c.text}</p>}
-            {has(c.tags) && <ul className="bp-tags">{c.tags.map((t: string) => <li key={t}>{t}</li>)}</ul>}
+            <p>{c.text}</p>
+            {has(c.tags) ? <ul className="bp-tags">{c.tags.map((t: string) => <li key={t}>{t}</li>)}</ul> : <span />}
           </article>
         ))}
       </div>
@@ -235,6 +274,7 @@ function ModelMatrix({doc}: {doc: Doc}) {
     <Section id="model-matrix" tone="alt" title={m.title}>
       <div className="bp-matrix-scroll">
         <table className="bp-matrix">
+          <colgroup>{[0, ...m.columns].map((_: unknown, i: number) => <col key={i} />)}</colgroup>
           <thead>
             <tr>
               <th scope="col" className="bp-matrix-first">{m.firstColumnLabel || 'Service'}</th>
@@ -296,11 +336,13 @@ function Parts({doc}: {doc: Doc}) {
 function Comparison({doc}: {doc: Doc}) {
   const c = doc.comparison
   if (!has(c?.options)) return null
+  // Every card gets the same rows, so "Best fit", "Power" and the rest sit level across the three cards.
+  const rows = Math.max(...c.options.map((o: Doc) => (o.rows || []).length))
   return (
     <Section id="comparison" title={c.title}>
-      <div className="bp-row bp-row--3">
+      <div className="bp-row bp-row--3 bp-subgrid">
         {c.options.map((o: Doc, i: number) => (
-          <article key={i} className="bp-card bp-compare">
+          <article key={i} className="bp-card bp-compare" style={{gridRow: `span ${rows + 1}`}}>
             <header className="bp-compare-head">
               <h3 className="bp-h6">{o.title}</h3>
               <Img image={o.diagram} width={700} className="bp-compare-diagram" />
@@ -354,7 +396,7 @@ function EstimateChecks({doc}: {doc: Doc}) {
           <div className="bp-estimate-side">
             <h2 id="estimate-title" className="bp-h2">{e.title}</h2>
             <div className="bp-estimate-photo">
-              <Img image={e.photo} width={900} />
+              {hasAsset(e.photo) ? <Img image={e.photo} width={900} /> : <img src={stockPhoto(doc, 'estimate')} alt="A Highlights Chicago electrician testing a panel" loading="lazy" />}
               {e.badgeNumber && <span className="bp-badge"><b>{e.badgeNumber}</b>{e.badgeLabel}</span>}
             </div>
           </div>
@@ -398,11 +440,13 @@ function EstimateChecks({doc}: {doc: Doc}) {
 
 function Installations({doc}: {doc: Doc}) {
   const s = doc.installations
-  if (!has(s?.slides)) return null
+  // A photo row without photos is only arrows: the section shows once Sanity has at least one photo.
+  const slides = (s?.slides || []).filter(hasAsset)
+  if (!slides.length) return null
   return (
     <Section id="installations" title={s.title}>
       <Carousel label={s.title || 'Installations'}>
-        {s.slides.map((img: Doc, i: number) => (
+        {slides.map((img: Doc, i: number) => (
           <figure key={i} className="bp-slide">
             <Img image={img} width={900} />
             {(img.caption || img.alt) && <figcaption>{img.caption || img.alt}</figcaption>}
@@ -464,7 +508,7 @@ function Pricing({doc}: {doc: Doc}) {
           {p.medians.map((m: Doc, i: number) => <li key={i} className="bp-card"><b>{m.value}</b><span>{m.label}</span></li>)}
         </ul>
       )}
-      {p.source && <p className="bp-note">{p.source}</p>}
+      {clean(p.source) && <p className="bp-note">{clean(p.source)}</p>}
     </Section>
   )
 }
@@ -481,19 +525,35 @@ function Trust({doc}: {doc: Doc}) {
           {t.address && <span className="bp-trust-pin"><Icon name="pin" size={16} />{t.address}</span>}
         </div>
         <div className="bp-facts">
-          {facts.map((f, i) => (
-            <div key={i} className={`bp-fact${i === 4 ? ' bp-fact--wide' : ''}`}>
-              {f.label && <p className="bp-label bp-label--green">{f.label}</p>}
-              <p className="bp-fact-value">{f.value}{f.suffix && <small>{f.suffix}</small>}</p>
-              {f.text && <p>{f.text}</p>}
-            </div>
-          ))}
+          {facts.map((f, i) => {
+            const label: string = f.label || ''
+            if (/google/i.test(label)) {
+              // The rating card from the design: the G mark, the score out of 5, stars and the review count.
+              return (
+                <div key={i} className="bp-fact bp-fact--wide bp-fact--google">
+                  <span className="bp-fact-g"><GoogleMark size={36} /></span>
+                  <p className="bp-fact-value">{f.value}{f.suffix && <small>{f.suffix}</small>}</p>
+                  <span className="bp-fact-rule" aria-hidden="true" />
+                  <div className="bp-fact-stars"><Stars className="bp-stars bp-stars--green" />{f.text && <p>{f.text}</p>}</div>
+                  <p className="bp-label bp-fact-tag"><Icon name="check" size={16} />{label}</p>
+                </div>
+              )
+            }
+            const icon = /owner/i.test(label) ? 'user' : /licen/i.test(label) ? 'shieldCheck' : /rank/i.test(label) ? 'award' : 'fileCheck'
+            return (
+              <div key={i} className={`bp-fact${i === 4 ? ' bp-fact--wide' : ''}`}>
+                {label && <p className="bp-label bp-label--green"><Icon name={icon} size={16} />{label}</p>}
+                <p className="bp-fact-value">{f.value}{f.suffix && <small>{f.suffix}</small>}</p>
+                {f.text && <p>{f.text}</p>}
+              </div>
+            )
+          })}
         </div>
       </div>
       {has(t.points) && (
         <div className="bp-points">
           {t.points.map((p: Doc, i: number) => (
-            <div key={i}><span className="bp-icon-badge bp-icon-badge--navy"><Icon name="check" /></span><h3 className="bp-h6">{p.title}</h3>{p.text && <p>{p.text}</p>}</div>
+            <div key={i}><span className="bp-icon-badge bp-icon-badge--navy"><Icon name={['fileCheck', 'clipboard', 'clock'][i % 3]} /></span><h3 className="bp-h6">{p.title}</h3>{p.text && <p>{p.text}</p>}</div>
           ))}
         </div>
       )}
@@ -547,6 +607,118 @@ function Process({doc}: {doc: Doc}) {
   )
 }
 
+/* The North Side map from the Paper design ("Map frame", 1200 x 560): the base map is the design's own SVG,
+   and each pin sits where the design puts it. Pins Sanity lists that the design has no spot for are shown as
+   chips under the map, so nothing is dropped. */
+const MAP_W = 1200
+const MAP_H = 560
+// x, y: the pin group's top-left (or top-right when side is 'r', label before the pin), in design pixels.
+const PIN_SPOTS: Record<string, {x: number; y: number; side?: 'r'}> = {
+  evanston: {x: 489, y: 65},
+  'rogers park': {x: 614, y: 180, side: 'r'},
+  'north park': {x: 874, y: 255, side: 'r'},
+  'albany park': {x: 799, y: 311, side: 'r'},
+  'jefferson park': {x: 129, y: 299},
+  'lincoln square': {x: 501, y: 314},
+  ravenswood: {x: 589, y: 272},
+  uptown: {x: 664, y: 311},
+  lakeview: {x: 679, y: 392},
+  'logan square': {x: 399, y: 445},
+  'wicker park': {x: 554, y: 492},
+}
+const pct = (v: number, of: number) => `${((v / of) * 100).toFixed(3)}%`
+const PinMark = ({w = 22, h = 28}: {w?: number; h?: number}) => (
+  <svg width={w} height={h} viewBox="0 0 22 28" aria-hidden="true">
+    <path d="M11 1C5.5 1 1.5 5.2 1.5 10.4C1.5 17.3 11 27 11 27C11 27 20.5 17.3 20.5 10.4C20.5 5.2 16.5 1 11 1Z" fill="#66B143" stroke="#FFFFFF" strokeWidth="1.5" />
+    <circle cx="11" cy="10.5" r="3.5" fill="#FFFFFF" />
+  </svg>
+)
+
+function BaseMap() {
+  const v = Array.from({length: 50}, (_, i) => `M${12 + i * 24} 0V560`).join(' ')
+  const h = Array.from({length: 26}, (_, i) => `M0 ${11 + i * 22}H1200`).join(' ')
+  const road = (d: string) => (
+    <>
+      <path d={d} fill="none" stroke="#CDD1D6" strokeWidth="9" strokeLinecap="round" />
+      <path d={d} fill="none" stroke="#FFFFFF" strokeWidth="6" strokeLinecap="round" />
+    </>
+  )
+  return (
+    <svg className="bp-map-base" viewBox={`0 0 ${MAP_W} ${MAP_H}`} preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+      <rect width="1200" height="560" fill="#E8EAED" />
+      <path d={v} fill="none" stroke="#F4F5F7" />
+      <path d={h} fill="none" stroke="#F4F5F7" />
+      <path d="M248 0C258 60 292 125 322 172C340 200 356 228 368 250" fill="none" stroke="#D3E6CB" strokeWidth="30" strokeLinecap="round" />
+      <g fill="#D3E6CB">
+        <rect x="296" y="248" width="52" height="26" rx="4" /><rect x="518" y="258" width="44" height="34" rx="4" />
+        <rect x="632" y="362" width="30" height="34" rx="4" /><rect x="478" y="364" width="28" height="20" rx="4" />
+        <rect x="414" y="530" width="60" height="40" rx="4" /><rect x="552" y="38" width="40" height="22" rx="4" />
+      </g>
+      <path d="M676 272C700 300 735 330 756 352C768 372 772 390 774 408C784 440 794 470 806 500C818 528 828 546 838 566" fill="none" stroke="#D3E6CB" strokeWidth="56" strokeLinecap="round" />
+      <path d="M262 0C270 60 300 120 330 170C350 205 368 240 380 262C398 292 430 318 452 334C478 352 498 370 508 390C518 412 528 440 548 470C572 500 610 528 640 548L662 566" fill="none" stroke="#CFE0EC" strokeWidth="5" strokeLinecap="round" />
+      <path d="M522 0C514 60 500 120 482 190C467 240 450 290 440 326" fill="none" stroke="#CFE0EC" strokeWidth="3" strokeLinecap="round" />
+      <path d="M0 106H1200 M0 174H1200 M0 240H1200 M0 264H1200 M0 308H1200 M0 333H1200 M0 376H1200 M0 423H1200 M0 467H1200 M0 513H1200 M120 0V560 M215 0V560 M315 0V560 M410 0V560 M510 0V560 M605 0V560" fill="none" stroke="#FFFFFF" strokeWidth="3" />
+      <path d="M150 109L285 196L446 276L505 333L650 420L785 507" fill="none" stroke="#FFFFFF" strokeWidth="3.5" strokeLinejoin="round" />
+      <path d="M0 250L140 327L410 473L565 520L670 566" fill="none" stroke="#FFFFFF" strokeWidth="3.5" strokeLinejoin="round" />
+      <path d="M585 174C595 230 605 290 615 330C640 380 670 420 700 450C730 480 760 505 780 530" fill="none" stroke="#FFFFFF" strokeWidth="3" />
+      {road('M140 327C220 360 300 400 360 425C430 455 520 500 640 566')}
+      {road('M140 327C175 280 210 230 213 196C214 130 205 60 200 0')}
+      {road('M140 327C100 340 50 350 0 362')}
+      {road('M676 286C700 308 724 330 742 350C756 372 768 405 778 430C790 460 800 488 810 510C818 530 824 548 832 566')}
+      <path d="M572 0C585 30 600 45 612 60C620 72 616 86 602 98C600 130 608 165 626 205C645 245 672 272 700 298C725 320 742 338 760 350C772 352 774 362 766 372C776 395 784 412 790 428C798 452 808 476 816 494C826 518 833 540 840 560L1200 560L1200 0Z" fill="#CFE0EC" />
+    </svg>
+  )
+}
+
+function AreaMap({a}: {a: Doc}) {
+  const pins: string[] = a.mapPins || []
+  const labels: string[] = a.mapLabels || []
+  const placed = pins.filter((p) => PIN_SPOTS[p.toLowerCase()])
+  const extra = pins.filter((p) => !PIN_SPOTS[p.toLowerCase()] && !/palatine/i.test(p))
+  const offMap = [...labels, ...pins].find((l) => /palatine/i.test(l))
+  const lake = labels.find((l) => /lake/i.test(l)) || 'Lake Michigan'
+  const name = a.shopName || SITE.name
+  return (
+    <div className="bp-map">
+      <a className="bp-map-canvas" href={a.mapLinkUrl || a.directionsUrl} target="_blank" rel="noopener noreferrer" aria-label={`${name} service area on Google Maps: ${pins.join(', ')}`}>
+        <BaseMap />
+        {placed.map((p) => {
+          const s = PIN_SPOTS[p.toLowerCase()]
+          const pos = s.side === 'r' ? {right: pct(s.x, MAP_W), top: pct(s.y, MAP_H)} : {left: pct(s.x, MAP_W), top: pct(s.y, MAP_H)}
+          return <span key={p} className={`bp-map-pin${s.side === 'r' ? ' bp-map-pin--r' : ''}`} style={pos}><PinMark /><span>{p}</span></span>
+        })}
+        <span className="bp-map-shop" style={{left: pct(366, MAP_W), top: pct(206, MAP_H)}}>
+          <span className="bp-map-shop-ring" />
+          <svg className="bp-map-shop-pin" width="36" height="46" viewBox="0 0 36 46" aria-hidden="true">
+            <path d="M18 1.5C9 1.5 2 8.4 2 17C2 28.5 18 44.5 18 44.5C18 44.5 34 28.5 34 17C34 8.4 27 1.5 18 1.5Z" fill="#223D90" stroke="#FFFFFF" strokeWidth="2" />
+            <circle cx="18" cy="17" r="8.5" fill="#FFFFFF" />
+            <path d="M19.5 11L14 18.5H18L16.8 23.5L22.3 16H18.3Z" fill="#223D90" />
+          </svg>
+          <span className="bp-map-shop-name">{name}</span>
+        </span>
+        {offMap && (
+          <span className="bp-map-off" style={{left: pct(16, MAP_W), top: pct(62, MAP_H)}}>
+            <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M17 17L7 7M7 15V7h8" fill="none" stroke="#3A7323" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+            <PinMark w={14} h={18} />
+            {offMap}
+          </span>
+        )}
+        <span className="bp-map-lake" style={{left: pct(870, MAP_W), top: pct(470, MAP_H)}}>{lake}</span>
+      </a>
+      <div className="bp-map-card">
+        <img src="/brands/images/v3/logos/highlights-chicago-logo.webp" alt="" width={140} height={34} />
+        <div className="bp-map-card-body">
+          <h3 className="bp-h5">{name}</h3>
+          {a.shopAddress && <p className="bp-map-address"><Icon name="pin" size={20} />{a.shopAddress}</p>}
+        </div>
+        {a.shopHours && <p className="bp-map-hours"><span aria-hidden="true" />{a.shopHours}</p>}
+        {a.directionsUrl && <a className="bp-btn bp-btn--blue bp-btn--block" href={a.directionsUrl} target="_blank" rel="noopener noreferrer"><Icon name="navigate" size={18} />{a.directionsLabel || 'Get directions'}</a>}
+      </div>
+      {extra.length > 0 && <ul className="bp-map-extra">{extra.map((p) => <li key={p}><PinMark w={14} h={18} />{p}</li>)}</ul>}
+    </div>
+  )
+}
+
 function Areas({doc}: {doc: Doc}) {
   const a = doc.areas
   if (!a?.title) return null
@@ -557,21 +729,7 @@ function Areas({doc}: {doc: Doc}) {
       title={a.title}
       head={a.mapLinkUrl && <a className="bp-link-green" href={a.mapLinkUrl} target="_blank" rel="noopener noreferrer">{a.mapLinkLabel || 'Open in Google Maps'}<Icon name="arrowUpRight" size={14} /></a>}
     >
-      <div className="bp-map">
-        <div className="bp-map-canvas" aria-hidden="true">
-          <span className="bp-map-lake">{(a.mapLabels || []).find((l: string) => /lake/i.test(l)) || 'Lake Michigan'}</span>
-          <ul className="bp-map-pins">
-            {(a.mapPins || []).map((p: string, i: number) => <li key={i} style={{['--i' as string]: i}}><Icon name="pin" size={16} />{p}</li>)}
-          </ul>
-        </div>
-        <div className="bp-map-card">
-          <img src="/brands/images/v3/logos/highlights-chicago-logo.webp" alt="" width={120} height={30} />
-          <h3 className="bp-h6">{a.shopName || SITE.name}</h3>
-          {a.shopAddress && <p className="bp-map-address"><Icon name="pin" size={18} />{a.shopAddress}</p>}
-          {a.shopHours && <p className="bp-map-hours">{a.shopHours}</p>}
-          {a.directionsUrl && <a className="bp-btn bp-btn--blue bp-btn--block" href={a.directionsUrl} target="_blank" rel="noopener noreferrer"><Icon name="navigate" size={18} />{a.directionsLabel || 'Get directions'}</a>}
-        </div>
-      </div>
+      <AreaMap a={a} />
       {has(a.regions) && (
         <div className="bp-row bp-row--4 bp-regions">
           {a.regions.map((r: Doc, i: number) => (
@@ -673,7 +831,7 @@ function OtherBrands({doc, brandLinks}: {doc: Doc; brandLinks: BrandLink[]}) {
         <div className="bp-row bp-row--4 bp-logos">
           {o.brands.map((b: Doc, i: number) => (
             <a key={i} className="bp-card bp-logo-card" href={b.link || find(b.name) || '/brands'}>
-              <Img image={b.logo} width={400} />
+              {hasAsset(b.logo) ? <Img image={b.logo} width={400} /> : logoFor(b.name) && <img src={logoFor(b.name)!} alt={`${b.name} logo`} loading="lazy" />}
               <span>{b.name}<Icon name="arrow" size={14} /></span>
             </a>
           ))}
@@ -689,7 +847,11 @@ function Library({doc}: {doc: Doc}) {
   const word = l.guideWord || 'Guide'
   const n = l.guides.length
   const tabs = l.guides.map((g: Doc, i: number) => (
-    <span key={i}><small>{word} {pad(i + 1)}</small><b>{g.tabLabel || g.title}</b></span>
+    <span key={i} className="bp-lib-tab-in">
+      <span className="bp-lib-tab-icon"><Icon name={['home', 'file', 'pin', 'bolt'][i % 4]} size={20} /></span>
+      <span><small>{word} {pad(i + 1)}</small><b>{g.tabLabel || g.title}</b></span>
+      <span className="bp-lib-tab-go"><Icon name="chevronRight" size={18} /></span>
+    </span>
   ))
   const nav = l.guides.map((g: Doc, i: number) => (
     has(g.sections) ? (
