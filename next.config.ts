@@ -28,8 +28,19 @@ const nextConfig: NextConfig = {
   // The Sanity webhook calls /api/revalidate on the Vercel address; vercel.json rewrites that to
   // /brands/api/revalidate (Next.js cannot rewrite outside its basePath).
   async headers() {
-    // Until NEXT_SITE_URL is the live domain, nothing on the Vercel address is indexed.
-    return isLive ? [] : [{source: '/:path*', headers: [{key: 'X-Robots-Tag', value: 'noindex, nofollow'}]}]
+    const noindex = [{key: 'X-Robots-Tag', value: 'noindex, nofollow'}]
+    // Until NEXT_SITE_URL is the live domain, nothing is indexed anywhere.
+    if (!isLive) return [{source: '/:path*', headers: noindex}]
+    return [
+      // Live: a page is indexable only when it reaches us through the Cloudflare Worker on
+      // www.highlightschicago.com, which adds "x-hc-proxy: brands". The same page opened on the
+      // vercel.app address stays noindex, so Google never indexes a duplicate copy.
+      {source: '/:path*', missing: [{type: 'header', key: 'x-hc-proxy', value: 'brands'}], headers: noindex},
+      // The Studio and the API routes are never indexed, whichever address serves them.
+      {source: '/studio/:path*', headers: noindex},
+      {source: '/studio', headers: noindex},
+      {source: '/api/:path*', headers: noindex},
+    ]
   },
 }
 
