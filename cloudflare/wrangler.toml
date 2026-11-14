@@ -1,0 +1,10 @@
+# Deploy with: npx wrangler deploy   (from this folder, logged in to the Cloudflare account that owns highlightschicago.com)
+name = "highlights-brand-pages"
+main = "worker.js"
+compatibility_date = "2026-11-01"
+
+routes = [
+  { pattern = "www.highlightschicago.com/brands*", zone_name = "highlightschicago.com" },
+  # Optional: adds the brands sitemap line to robots.txt. Remove if robots.txt is edited on the main site instead.
+  { pattern = "www.highlightschicago.com/robots.txt", zone_name = "highlightschicago.com" },
+]
