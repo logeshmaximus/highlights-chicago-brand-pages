@@ -1,54 +1,38 @@
-# Highlights Chicago brand pages: design preview
+# Highlights Chicago brand pages
 
-Static preview of Highlights Chicago brand pages in Design System v3, the system used on the v3 service and category pages. It is for review only.
+Next.js app for **www.highlightschicago.com/brands**, reading the **Brand Service Pages** Sanity project (`x6yq02oi`).
 
-- Live preview: https://logeshmaximus.github.io/highlights-chicago-brand-pages/
-- Service landing page: https://logeshmaximus.github.io/highlights-chicago-brand-pages/brands/generac/generac-generator-installation/
-- Brands hub: https://logeshmaximus.github.io/highlights-chicago-brand-pages/brands/
-
-Every page is `noindex`, `robots.txt` disallows crawling, and canonical URLs point to https://www.highlightschicago.com, so the preview never competes with the real site. Forms do not submit.
-
-## What is in it
-
-| Page | Path | Notes |
+| Address | Page | Content from |
 |---|---|---|
-| Service landing page | `brands/generac/generac-generator-installation/` | The first title on the Brand Pages sheet, "Generac Generator Installation & Repair", in the form-first brand-page layout: quote form in the hero, models and services sections, a variable price section, and swipe rows instead of stacked cards. Planned live URL: `/services/generac-generator-installation/chicago`, under the generator installation page. |
-| First version | `brands/generac/generac-generator-installation-v1/` | The same page in the long v3 service-page order, kept for comparison. |
-| Brands hub | `brands/` | 58 brands in one listing. Brands whose pages are all written come first, then brands with some written pages, then the rest by keyword volume. Equipment chips narrow the list. |
-| Brand cluster pages | `brands/<brand>/` | One per brand, in the v3 category-page design, listing that brand's services from the sheet (69 in all). Written pages come first and link to their live URL; the rest link to the contact page. |
+| `/brands` | All brands; brands with published pages first | `lib/brands.mjs` (the Brand Pages sheet) + published pages |
+| `/brands/<brand>` | One brand's services; published pages first, the rest link to the contact page | same |
+| `/brands/<brand>/<page>` | The brand service landing page | the Sanity document (type `brandServiceLandingPageTemplate`) |
+| `/brands/studio` | The Studio, with a **Presentation** tab that previews drafts | Sanity |
 
-## Site header (shared with the nav preview)
+The bare Vercel address redirects to `/brands`, and `/studio` to `/brands/studio`.
 
-Every page uses one header, `src/lib/site-nav.mjs` with `assets/css/site-nav.css` and `assets/js/site-nav.js`, built to the Design System v3 navigation spec (Paper file "Highlights Chicago Design System", page "Design System v3 · clean", artboard "09 · Navigation"):
+## Publishing flow
 
-- Nav: Home, About Us, Services (menu), Brands (a plain link to the brands page), Service Areas, Blog, Learning Center, then the Contact us pill. Seven links fill the 1200 frame, so on desktop the phone number sits in the utility bar; below 1100px the white menu sheet takes over, with a round call button.
-- Services menu (`src/content/nav.mjs`): four columns of live pages only, exactly what visitors get. A planned page stays in the list with `0` and appears once it is published and set to `1` with its URL. 12 pages that went live after 5 Nov now link to their nested URLs.
-- Brands has no menu: Brands → the brands page → a brand's page → its brand service page (`/services/brands/<brand>/<page>`).
+1. Write or edit a page in the Studio (`/brands/studio` or hc-brand-service-pages.sanity.studio). Open **Presentation** to see the draft as a real page.
+2. **Publish.** The Sanity webhook calls `/api/revalidate` (`vercel.json` rewrites it to `/brands/api/revalidate`); every brand listing and the page refresh.
+3. Check it on the Vercel address, then go live with the Cloudflare Worker route `www.highlightschicago.com/brands*` → this Vercel app (same path; the app's `basePath` is `/brands`).
 
-The old nav preview (https://logeshmaximus.github.io/highlights-chicago-services-dropdown/) now redirects here: this is the one preview for the header, the Services menu and the brand pages.
+Until `NEXT_SITE_URL` is the live domain, every page is `noindex` (meta tag and `X-Robots-Tag` header).
 
-The written brand pages are listed in `LIVE` in `src/content/brands.mjs` (the Sanity slugs in project `x6yq02oi`). On the live site this list comes from the published pages in Sanity.
+## Environment
 
-## Build
+See `.env.example` (no `NEXT_PUBLIC_` names). Keep real values in `.env.local` (ignored by git) and in Vercel.
+
+## Code
+
+- `components/landing/BrandServicePage.tsx`: the landing page, section by section, following the Paper design "HC · Generac generator brand page". An empty field or section is left out.
+- `public/assets/css/brand-page.css`: its styles (Design System v3 tokens; phones from 1023px).
+- `lib/site-nav.mjs`, `lib/nav.mjs`: the site header (live nav + Brands; Services menu shows live pages only).
+- `lib/brands.mjs`, `lib/collections.mjs`: brand data from the sheet and the `/brands` and `/brands/<brand>` pages.
+- `sanity/`: client, queries, schema (copied from the Brand Service Pages studio; keep both in step), `sanity.config.ts` for the Studio.
 
 ```
-node src/build.mjs
-python -m http.server 8720 --directory docs
+npm install
+npm run dev      # http://localhost:3000/brands
+npm run build
 ```
-
-- `src/content/`: business facts (`site.mjs`), the brand list from the sheet (`brands.mjs`) and the variable prices (`pricing.mjs`, empty until the pricing artifact arrives)
-- `src/pages/`: the Generac page (`generac-v2.mjs`, reusing the verified copy in `generac.mjs`, which also renders the first version) and the hub and cluster templates (`collections.mjs`)
-- `src/lib/`: shared markup and section renderers, in the v3 class names (`sections-v2.mjs` and `brand-v2.css` hold the brand-page sections)
-- `src/static/`: the v3 stylesheets (copied unchanged), fonts, images, plus `preview.css` and `site.js` for the preview's interactions
-- `docs/`: the built site, served by GitHub Pages
-
-## Open items for review
-
-- **Prices and permits.** Figures come from the permit and cost sheet (`Highlights Chicago — Chicago Permit & Building Data.xlsx`, Aug 2024 to Aug 2026): medians of reported construction value on City permits, not quotes. The generator median is $15,000 on 161 permits; set it per page in `src/content/pricing.mjs`. Rows the sheet does not cover still show "Price pending".
-- **Scroll depth.** At 1440px the page is about 13,700px tall, down from 28,400px in the first version. On a 375px phone it is about 9,400px, down from 51,100px.
-
-- **Logos.** All 58 brands show their own mark (`docs/images/logos/`, sources in `SOURCES.md` there). Most come from the brand's site or Wikipedia / Wikimedia Commons. Broan, BRK, Challenger, Cutler-Hammer, Hampton Bay, Harbor Breeze, Murray, Pushmatic and Zinsco come from a retailer, distributor or dealer copy or a label photo, so verify them against the owners' brand files before production.
-- **Generator photos.** No Highlights generator job photos exist yet. The page shows one illustrative standby unit, and panel, meter and service photos from Highlights Chicago's Yelp page, each with its credit.
-- **Facts.** Only verified (`live`) facts are used. These stay off the page until they are confirmed: BBB rating, bonding, suburban registration numbers, founder's full name, written scope on every job, salaried crews and diagnose-first.
-- **Incentives.** The incentives line cites two IRS pages, both read on 2026-10-26. ComEd's rebate pages could not be read that day, so they are not cited.
-- **QC.** The page follows the service-page writing rules: third person, each fact once, no dollar figures outside the permit table, review fragments of 14 words or fewer with links. It has not been through the QC gate yet.

@@ -1,3 +1,11 @@
 node_modules/
 .DS_Store
 Thumbs.db
+.next/
+next-env.d.ts
+*.tsbuildinfo
+.vercel
+# Real environment values: never commit
+.env
+.env.local
+.env.*.local

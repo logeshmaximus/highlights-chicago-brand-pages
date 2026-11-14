@@ -1,0 +1,29 @@
+{
+  "name": "highlights-chicago-brand-pages",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Highlights Chicago brand pages at highlightschicago.com/brands: Next.js app reading the Brand Service Pages Sanity project (x6yq02oi), with the Studio at /brands/studio.",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@sanity/image-url": "^2.1.1",
+    "@sanity/vision": "^6.20.0",
+    "next": "16.3.3",
+    "next-sanity": "^13.3.4",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "sanity": "^6.20.0",
+    "server-only": "^0.0.1",
+    "styled-components": "^6.6.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "typescript": "^5"
+  }
+}

@@ -1,0 +1,266 @@
+{
+ "arlo": {
+  "file": "logo-arlo.png",
+  "aspect": 2.18
+ },
+ "autel": {
+  "file": "logo-autel.svg",
+  "aspect": 6.19
+ },
+ "blink": {
+  "file": "logo-blink.png",
+  "aspect": 2.517
+ },
+ "briggs-and-stratton": {
+  "file": "logo-briggs-and-stratton.png",
+  "aspect": 1.989
+ },
+ "brk": {
+  "file": "logo-brk.png",
+  "aspect": 1.961
+ },
+ "broan": {
+  "file": "logo-broan.png",
+  "aspect": 2.32
+ },
+ "canadian-solar": {
+  "file": "logo-canadian-solar.png",
+  "aspect": 6.692
+ },
+ "casablanca": {
+  "file": "logo-casablanca.png",
+  "aspect": 3.296
+ },
+ "cat": {
+  "file": "logo-cat.svg",
+  "aspect": 5.6
+ },
+ "challenger": {
+  "file": "logo-challenger.png",
+  "aspect": 1.041
+ },
+ "champion": {
+  "file": "logo-champion.png",
+  "aspect": 2.469
+ },
+ "chargepoint": {
+  "file": "logo-chargepoint.svg",
+  "aspect": 5.25
+ },
+ "cummins": {
+  "file": "logo-cummins.svg",
+  "aspect": 0.99
+ },
+ "cutler-hammer": {
+  "file": "logo-cutler-hammer.png",
+  "aspect": 1.298
+ },
+ "duromax": {
+  "file": "logo-duromax.png",
+  "aspect": 5.933
+ },
+ "eaton": {
+  "file": "logo-eaton.svg",
+  "aspect": 3.638
+ },
+ "ecoflow": {
+  "file": "logo-ecoflow.svg",
+  "aspect": 10
+ },
+ "emporia": {
+  "file": "logo-emporia.png",
+  "aspect": 3.325
+ },
+ "enphase": {
+  "file": "logo-enphase.svg",
+  "aspect": 5.618
+ },
+ "eufy": {
+  "file": "logo-eufy.svg",
+  "aspect": 2.045
+ },
+ "fanimation": {
+  "file": "logo-fanimation.png",
+  "aspect": 5.244
+ },
+ "federal-pacific": {
+  "file": "logo-federal-pacific.png",
+  "aspect": 4.487
+ },
+ "firman": {
+  "file": "logo-firman.png",
+  "aspect": 4.982
+ },
+ "first-alert": {
+  "file": "logo-first-alert.png",
+  "aspect": 4.18
+ },
+ "ford": {
+  "file": "logo-ford.svg",
+  "aspect": 2.778
+ },
+ "fronius": {
+  "file": "logo-fronius.png",
+  "aspect": 2
+ },
+ "ge": {
+  "file": "logo-ge.svg",
+  "aspect": 1
+ },
+ "generac": {
+  "file": "logo-generac.png",
+  "aspect": 4.491
+ },
+ "grizzl-e": {
+  "file": "logo-grizzl-e.png",
+  "aspect": 1.281
+ },
+ "halo": {
+  "file": "logo-halo.svg",
+  "aspect": 3.571
+ },
+ "hampton-bay": {
+  "file": "logo-hampton-bay.png",
+  "aspect": 7.615
+ },
+ "harbor-breeze": {
+  "file": "logo-harbor-breeze.png",
+  "aspect": 1.98
+ },
+ "honeywell": {
+  "file": "logo-honeywell.svg",
+  "aspect": 5.645
+ },
+ "hunter": {
+  "file": "logo-hunter.png",
+  "aspect": 4.054
+ },
+ "insinkerator": {
+  "file": "logo-insinkerator.svg",
+  "aspect": 2.5
+ },
+ "juicebox": {
+  "file": "logo-juicebox.png",
+  "aspect": 5.151
+ },
+ "juno": {
+  "file": "logo-juno.png",
+  "aspect": 2.229
+ },
+ "kasa": {
+  "file": "logo-kasa.png",
+  "aspect": 3.297
+ },
+ "kidde": {
+  "file": "logo-kidde.svg",
+  "aspect": 3.88
+ },
+ "kohler": {
+  "file": "logo-kohler.svg",
+  "aspect": 4.604
+ },
+ "leviton": {
+  "file": "logo-leviton.svg",
+  "aspect": 2.941
+ },
+ "lg": {
+  "file": "logo-lg.svg",
+  "aspect": 2.182
+ },
+ "lutron": {
+  "file": "logo-lutron.svg",
+  "aspect": 6.75
+ },
+ "milbank": {
+  "file": "logo-milbank.svg",
+  "aspect": 2.909
+ },
+ "minka-aire": {
+  "file": "logo-minka-aire.png",
+  "aspect": 2.585
+ },
+ "moen": {
+  "file": "logo-moen.svg",
+  "aspect": 4.437
+ },
+ "murray": {
+  "file": "logo-murray.png",
+  "aspect": 2.884
+ },
+ "nest": {
+  "file": "logo-nest.svg",
+  "aspect": 2.879
+ },
+ "panasonic": {
+  "file": "logo-panasonic.svg",
+  "aspect": 6.531
+ },
+ "pushmatic": {
+  "file": "logo-pushmatic.png",
+  "aspect": 1.802
+ },
+ "qcells": {
+  "file": "logo-qcells.svg",
+  "aspect": 2.997
+ },
+ "reliance": {
+  "file": "logo-reliance.png",
+  "aspect": 4.337
+ },
+ "ring": {
+  "file": "logo-ring.svg",
+  "aspect": 1.597
+ },
+ "rivian": {
+  "file": "logo-rivian.svg",
+  "aspect": 5
+ },
+ "siemens": {
+  "file": "logo-siemens.svg",
+  "aspect": 6.289
+ },
+ "sma": {
+  "file": "logo-sma.svg",
+  "aspect": 1.579
+ },
+ "solaredge": {
+  "file": "logo-solaredge.svg",
+  "aspect": 4.714
+ },
+ "span": {
+  "file": "logo-span.svg",
+  "aspect": 6.818
+ },
+ "square-d": {
+  "file": "logo-square-d.svg",
+  "aspect": 7.052
+ },
+ "sunpower": {
+  "file": "logo-sunpower.svg",
+  "aspect": 7.374
+ },
+ "sylvania": {
+  "file": "logo-sylvania.png",
+  "aspect": 1.072
+ },
+ "tesla": {
+  "file": "logo-tesla.svg",
+  "aspect": 7.671
+ },
+ "wallbox": {
+  "file": "logo-wallbox.png",
+  "aspect": 4.146
+ },
+ "waste-king": {
+  "file": "logo-waste-king.svg",
+  "aspect": 8.894
+ },
+ "westinghouse": {
+  "file": "logo-westinghouse.png",
+  "aspect": 3.081
+ },
+ "zinsco": {
+  "file": "logo-zinsco.png",
+  "aspect": 2.128
+ }
+}

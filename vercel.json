@@ -1,11 +1,10 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "framework": null,
-  "installCommand": "",
-  "buildCommand": "",
-  "outputDirectory": "docs",
-  "redirects": [
-    { "source": "/studio", "destination": "https://hc-brand-service-pages.sanity.studio", "permanent": false },
-    { "source": "/studio/:path*", "destination": "https://hc-brand-service-pages.sanity.studio/:path*", "permanent": false }
+  "framework": "nextjs",
+  "installCommand": "npm install",
+  "buildCommand": "next build",
+  "outputDirectory": ".next",
+  "rewrites": [
+    { "source": "/api/revalidate", "destination": "/brands/api/revalidate" }
   ]
 }
