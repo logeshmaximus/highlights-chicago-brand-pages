@@ -191,19 +191,6 @@ function Hero({doc, brandHref}: {doc: Doc; brandHref: string}) {
   )
 }
 
-function JumpBar({doc}: {doc: Doc}) {
-  const j = doc.jumpBar
-  if (!has(j?.links)) return null
-  return (
-    <nav className="bp-jump" aria-label={j.label || 'On this page'}>
-      <div className="bp-wrap bp-jump-inner">
-        <b>{j.label || 'On this page'}</b>
-        <ul>{j.links.map((l: Doc, i: number) => <li key={i}><a href={`#${l.target}`} className={i === 0 ? 'is-first' : ''}>{l.label}</a></li>)}</ul>
-      </div>
-    </nav>
-  )
-}
-
 function Services({doc}: {doc: Doc}) {
   const s = doc.services
   if (!has(s?.groups)) return null
@@ -741,7 +728,7 @@ export function BrandServicePage({doc, brandHref, brandLinks}: {doc: Doc; brandH
   return (
     <div className="bp">
       <Hero doc={doc} brandHref={brandHref} />
-      <JumpBar doc={doc} />
+      {/* The "On this page" bar (jumpBar in Sanity) is not shown: removed at the owner's request on 2026-11-14. */}
       <Services doc={doc} />
       <Models doc={doc} />
       <ModelMatrix doc={doc} />

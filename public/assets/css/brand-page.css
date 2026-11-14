@@ -113,7 +113,7 @@
 .bp-jump a{display:inline-block;padding:7px 14px;border:1px solid var(--line);border-radius:999px;font:500 14px/20px var(--body);text-decoration:none;white-space:nowrap;transition:background .3s ease}
 .bp-jump a:hover{background:var(--blue-tint)}
 .bp-jump a.is-first{background:var(--navy);border-color:var(--navy);color:#fff}
-.bp-section{scroll-margin-top:66px}
+.bp-section{scroll-margin-top:16px}
 
 /* Services */
 .bp-svc{display:grid;grid-template-columns:340px minmax(0,1fr);gap:24px;align-items:start}
